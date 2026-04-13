@@ -13,8 +13,8 @@ body{
   direction:rtl;
   color:white;
 
-  /* 🏜️ خلفية البتراء */
-  background-image:url("https://images.unsplash.com/photo-1539650116574-75c0c6d73f74?q=80&w=1600&auto=format&fit=crop");
+  /* 🏜️ بتراء */
+  background-image:url("https://upload.wikimedia.org/wikipedia/commons/e/e7/Petra_Jordan_BW_21.jpg");
   background-size:cover;
   background-position:center;
   min-height:100vh;
@@ -37,7 +37,7 @@ body{
   backdrop-filter:blur(12px);
 }
 
-/* 🇯🇴 ألوان علم الأردن */
+/* 🇯🇴 عنوان */
 .title{
   font-size:26px;
   font-weight:bold;
@@ -48,7 +48,6 @@ body{
 .sub2{color:#ffcc00;font-size:16px;margin-bottom:15px;}
 
 .counter{font-size:70px;font-weight:bold;}
-
 #progressText{color:#ffcc00;}
 
 .progress-container{
@@ -98,8 +97,10 @@ button{
 
 <body>
 
-<!-- 🎵 صوت بدون ملف -->
-<audio id="anthem" src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Jordanian_royal_anthem.ogg"></audio>
+<!-- 🎵 موسيقى خلفية -->
+<audio id="bgMusic" loop>
+  <source src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Jordanian_royal_anthem.ogg" type="audio/ogg">
+</audio>
 
 <div class="overlay">
 
@@ -123,7 +124,6 @@ button{
 </div>
 
 <button class="addBtn" onclick="add()">➕ إضافة مشاركة</button>
-<button class="soundBtn" onclick="startSound()">🎵 تشغيل السلام الملكي</button>
 
 </div>
 </div>
@@ -143,16 +143,19 @@ const db = firebase.database().ref("count");
 
 const MAX = 500;
 
-let anthem = document.getElementById("anthem");
+let bgMusic = document.getElementById("bgMusic");
+let musicStarted = false;
 
-/* 🎵 تشغيل الصوت (مضمون بدون ملف) */
-function startSound(){
-  anthem.play().catch(()=>{
-    alert("اضغطي مرة ثانية لتشغيل الصوت 🎵");
-  });
+/* 🎵 تشغيل الموسيقى بعد أول تفاعل */
+function startMusicOnce(){
+  if(!musicStarted){
+    bgMusic.volume = 0.4;
+    bgMusic.play().catch(()=>{});
+    musicStarted = true;
+  }
 }
 
-/* تحديث مباشر */
+/* تحديث */
 db.on("value", (snap)=>{
   let count = snap.val() || 0;
 
@@ -170,8 +173,11 @@ db.on("value", (snap)=>{
   }
 });
 
-/* إضافة مشاركة */
+/* ➕ إضافة + تشغيل الموسيقى تلقائي بعد أول ضغط */
 function add(){
+
+  startMusicOnce(); // 🎵 هنا التشغيل التلقائي الذكي
+
   db.transaction((current)=>{
     let v = current || 0;
     if(v >= MAX) return MAX;
