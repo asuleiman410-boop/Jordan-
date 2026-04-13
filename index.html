@@ -14,10 +14,8 @@ body{
   color:white;
 
   /* 🏜️ بتراء */
-  background-image:url("https://upload.wikimedia.org/wikipedia/commons/e/e7/Petra_Jordan_BW_21.jpg");
-  background-size:cover;
-  background-position:center;
-  min-height:100vh;
+  background: url("https://upload.wikimedia.org/wikipedia/commons/5/5f/Petra_Jordan_BW_36.jpg") no-repeat center center fixed;
+  background-size: cover;
 }
 
 .overlay{
@@ -37,17 +35,17 @@ body{
   backdrop-filter:blur(12px);
 }
 
-/* 🇯🇴 عنوان */
 .title{
   font-size:26px;
   font-weight:bold;
   color:#ffcc00;
 }
 
-.sub1{margin:0;font-size:18px;}
-.sub2{color:#ffcc00;font-size:16px;margin-bottom:15px;}
+.sub1{font-size:18px;margin:0;}
+.sub2{font-size:16px;color:#ffcc00;margin-bottom:15px;}
 
 .counter{font-size:70px;font-weight:bold;}
+
 #progressText{color:#ffcc00;}
 
 .progress-container{
@@ -97,7 +95,7 @@ button{
 
 <body>
 
-<!-- 🎵 موسيقى خلفية -->
+<!-- 🎵 صوت -->
 <audio id="bgMusic" loop>
   <source src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Jordanian_royal_anthem.ogg" type="audio/ogg">
 </audio>
@@ -124,6 +122,7 @@ button{
 </div>
 
 <button class="addBtn" onclick="add()">➕ إضافة مشاركة</button>
+<button class="soundBtn" onclick="startMusic()">🎵 تشغيل الصوت</button>
 
 </div>
 </div>
@@ -146,16 +145,18 @@ const MAX = 500;
 let bgMusic = document.getElementById("bgMusic");
 let musicStarted = false;
 
-/* 🎵 تشغيل الموسيقى بعد أول تفاعل */
-function startMusicOnce(){
+/* 🎵 تشغيل الصوت بعد أول تفاعل */
+function startMusic(){
   if(!musicStarted){
     bgMusic.volume = 0.4;
-    bgMusic.play().catch(()=>{});
+    bgMusic.play().catch(()=>{
+      alert("اضغطي مرة ثانية لتشغيل الصوت 🎵");
+    });
     musicStarted = true;
   }
 }
 
-/* تحديث */
+/* تحديث العداد */
 db.on("value", (snap)=>{
   let count = snap.val() || 0;
 
@@ -173,10 +174,9 @@ db.on("value", (snap)=>{
   }
 });
 
-/* ➕ إضافة + تشغيل الموسيقى تلقائي بعد أول ضغط */
+/* إضافة مشاركة */
 function add(){
-
-  startMusicOnce(); // 🎵 هنا التشغيل التلقائي الذكي
+  startMusic(); // أول ضغط يشغل الصوت
 
   db.transaction((current)=>{
     let v = current || 0;
