@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>رفع العلم الأردني LIVE</title>
+<title>رفع العلم الأردني</title>
 
 <style>
 body{
@@ -13,17 +13,16 @@ body{
   direction:rtl;
   color:white;
 
-  /* 🏜️ خلفية البتراء المضمونة */
-  background-image: url("https://images.unsplash.com/photo-1589395937772-6c7b5b9b1c1c?q=80&w=1600&auto=format&fit=crop");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  /* 🏜️ خلفية بتراء مضمونة */
+  background-image:url("https://images.unsplash.com/photo-1539650116574-75c0c6d73f74?q=80&w=1600&auto=format&fit=crop");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
   min-height:100vh;
 }
 
-/* تغميق خفيف */
 .overlay{
-  background:rgba(0,0,0,0.45);
+  background:rgba(0,0,0,0.25);
   min-height:100vh;
   padding:20px;
 }
@@ -49,27 +48,14 @@ body{
   -webkit-text-fill-color:transparent;
 }
 
-/* النصوص */
-.sub1{
-  font-size:18px;
-  margin:0;
-  color:white;
-  text-shadow:0 1px 3px black;
-}
+.sub1{font-size:18px;margin:0;}
+.sub2{font-size:16px;color:#ffcc00;margin-bottom:15px;}
 
-.sub2{
-  font-size:16px;
-  margin-bottom:15px;
-  color:#ffcc00;
-}
-
-/* عداد */
 .counter{
   font-size:70px;
   font-weight:bold;
 }
 
-/* progress */
 #progressText{
   font-size:18px;
   color:#ffcc00;
@@ -88,10 +74,9 @@ body{
   height:100%;
   width:0%;
   background:linear-gradient(to right, red, green);
-  transition:1.2s ease;
+  transition:1s ease;
 }
 
-/* pole */
 .pole{
   width:10px;
   height:300px;
@@ -106,30 +91,26 @@ body{
   position:absolute;
   bottom:0;
   left:-38px;
-  transition:1.2s ease;
+  transition:1s ease;
 }
 
-/* buttons */
 button{
-  padding:14px 22px;
+  padding:14px 24px;
   font-size:16px;
   border:none;
   border-radius:12px;
   cursor:pointer;
-  font-weight:bold;
   margin:5px;
 }
 
-.addBtn{ background:#ffcc00; }
-.soundBtn{ background:#1e88e5; color:white; }
-
-button:disabled{ background:gray; }
+.addBtn{background:#ffcc00;font-weight:bold;}
+.soundBtn{background:#1e88e5;color:white;}
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 الصوت -->
+<!-- 🎵 الصوت (مهم: لازم يكون داخل تفاعل المستخدم) -->
 <audio id="anthem">
   <source src="jordan-anthem.mp3" type="audio/mpeg">
 </audio>
@@ -156,18 +137,13 @@ button:disabled{ background:gray; }
 </div>
 
 <button class="addBtn" onclick="add()">➕ إضافة مشاركة</button>
-<button class="soundBtn" onclick="playAnthem()">🎵 تشغيل السلام الملكي</button>
+<button class="soundBtn" onclick="playAnthem()">🎵 السلام الملكي</button>
 
 </div>
 </div>
-
-<!-- 🏆 -->
-<div id="winScreen"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -178,18 +154,17 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref("count");
 
 const MAX = 500;
-
 let anthem = document.getElementById("anthem");
 
-// 🎵 تشغيل الصوت (مضمون)
+/* 🎵 تشغيل الصوت (مضمون فقط عند ضغط المستخدم) */
 function playAnthem(){
-  anthem.play().catch(()=> {
+  anthem.play().catch(()=>{
     alert("اضغطي مرة ثانية لتشغيل الصوت 🎵");
   });
 }
 
-// تحديث مباشر
-db.on("value", (snap) => {
+/* تحديث مباشر */
+db.on("value", (snap)=>{
   let count = snap.val() || 0;
 
   document.getElementById("count").innerText = count;
@@ -200,15 +175,12 @@ db.on("value", (snap) => {
 
   let percent = (count / MAX) * 100;
   document.getElementById("bar").style.width = percent + "%";
-
-  if(count >= MAX){
-    confetti();
-  }
 });
 
-// ➕ إضافة
+/* إضافة مشاركة */
 function add(){
 
+  // تشغيل الصوت عند أول تفاعل (حل مشكلة المتصفح)
   if(anthem.paused){
     anthem.play().catch(()=>{});
   }
