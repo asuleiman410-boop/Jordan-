@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Raise the Flag</title>
+<title>رفع العلم LIVE</title>
 
 <style>
 body {
@@ -10,73 +10,54 @@ body {
   font-family: Arial;
   direction: rtl;
   text-align: center;
-  background: linear-gradient(135deg, #1f4037, #99f2c8);
-  color: white;
+  background: #f0f2f5;
 }
 
 .container {
   margin-top: 40px;
 }
 
-.card {
-  background: rgba(255,255,255,0.15);
-  width: 340px;
-  margin: auto;
-  padding: 25px;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-
-h2 {
-  margin-bottom: 5px;
+.title {
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
 .counter {
-  font-size: 70px;
+  font-size: 60px;
   font-weight: bold;
   margin: 20px 0;
-  color: #fff;
-  text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
 }
 
-/* سارية العلم */
 .pole {
   width: 10px;
   height: 320px;
   background: #222;
-  margin: 20px auto;
+  margin: auto;
   position: relative;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
-/* العلم */
 .flag {
-  width: 85px;
+  width: 90px;
   position: absolute;
   bottom: 0;
-  left: -38px;
-  transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-  filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
+  left: -40px;
+  transition: 0.4s ease;
 }
 
 button {
-  padding: 12px 25px;
+  padding: 12px 20px;
   font-size: 16px;
-  border: none;
-  border-radius: 12px;
+  margin-top: 20px;
   cursor: pointer;
-  background: #ffcc00;
-  color: black;
-  font-weight: bold;
-  margin-top: 10px;
-  transition: 0.3s;
+  border: none;
+  border-radius: 10px;
+  background: #28a745;
+  color: white;
 }
 
 button:hover {
-  transform: scale(1.05);
-  background: #ffdb4d;
+  background: #1e7e34;
 }
 </style>
 </head>
@@ -85,9 +66,7 @@ button:hover {
 
 <div class="container">
 
-<div class="card">
-
-<h2>🇯🇴 رفع العلم الأردني</h2>
+<div class="title">🇯🇴 رفع العلم الأردني LIVE</div>
 
 <p>مدرسة أم ورقة الأنصارية الأساسية للبنات</p>
 <p>لجنة النهوض الوطني</p>
@@ -95,25 +74,40 @@ button:hover {
 <div class="counter" id="count">0</div>
 
 <div class="pole">
-  <img id="flag" class="flag" src="https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg">
+  <img id="flag" class="flag"
+  src="https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg">
 </div>
 
 <button onclick="add()">إضافة مشاركة</button>
 
 </div>
 
-</div>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-let count = 0;
+  // 🔴 ضعي رابط Firebase هنا
+  const firebaseConfig = {
+    https://jordan-flag-default-rtdb.asia-southeast1.firebasedatabase.app/
 
-function add() {
-  count++;
-  document.getElementById("count").innerText = count;
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database().ref("count");
 
-  let flag = document.getElementById("flag");
-  flag.style.bottom = (count * 10) + "px";
-}
+  // قراءة الرقم مباشرة (Live)
+  db.on("value", (snapshot) => {
+    let count = snapshot.val() || 0;
+
+    document.getElementById("count").innerText = count;
+    document.getElementById("flag").style.bottom = (count * 10) + "px";
+  });
+
+  // زيادة الرقم
+  function add() {
+    db.transaction(function(current) {
+      return (current || 0) + 1;
+    });
+  }
 </script>
 
 </body>
