@@ -13,13 +13,17 @@ body{
   direction:rtl;
   color:white;
 
-  /* 🏜️ بتراء واضحة ومضمونة */
-  background: url("https://upload.wikimedia.org/wikipedia/commons/6/6d/Petra_Jordan_SiQ.jpg") no-repeat center center fixed;
+  /* 🌄 الخلفية القديمة التي كانت تعمل */
+  background-image: url("https://images.unsplash.com/photo-1589395937772-6c7b5b9b1c1c?q=80&w=1600&auto=format&fit=crop");
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height:100vh;
+  background-attachment: fixed;
 }
 
 .overlay{
-  background:rgba(0,0,0,0.35);
+  background:rgba(0,0,0,0.55);
   min-height:100vh;
   padding:20px;
 }
@@ -63,14 +67,13 @@ h2{
   margin-bottom:15px;
 }
 
-/* progress bar */
+/* progress */
 .progress-container{
   width:100%;
   height:12px;
   background:rgba(255,255,255,0.25);
   border-radius:10px;
   overflow:hidden;
-  margin-bottom:20px;
 }
 
 .progress-bar{
@@ -149,8 +152,6 @@ button:disabled{
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
 <script>
 const firebaseConfig = {
   databaseURL: "https://flag-77368-default-rtdb.firebaseio.com/"
@@ -160,7 +161,6 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref("count");
 
 const MAX = 500;
-const maxHeight = 150;
 
 // تحديث مباشر
 db.on("value", (snap) => {
@@ -169,7 +169,7 @@ db.on("value", (snap) => {
   document.getElementById("count").innerText = count;
   document.getElementById("progressText").innerText = count + " / " + MAX;
 
-  let height = (count / MAX) * maxHeight;
+  let height = (count / MAX) * 150;
   document.getElementById("flag").style.bottom = height + "px";
 
   let percent = (count / MAX) * 100;
@@ -178,7 +178,6 @@ db.on("value", (snap) => {
   if (count >= MAX) {
     document.getElementById("btn").disabled = true;
     document.getElementById("btn").innerText = "🏆 اكتمل رفع العلم";
-    confetti();
   }
 });
 
@@ -186,9 +185,7 @@ db.on("value", (snap) => {
 function add() {
   db.once("value").then((snap) => {
     let value = snap.val() || 0;
-
     if (value >= MAX) return;
-
     db.set(value + 1);
   });
 }
