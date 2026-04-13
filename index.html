@@ -93,21 +93,21 @@ const db = firebase.database().ref("count");
 // عرض الرقم Live
 db.on("value", (snap) => {
   let count = snap.val() || 0;
-
   document.getElementById("count").innerText = count;
   document.getElementById("flag").style.bottom = (count * 10) + "px";
 });
 
 // زيادة مع حد أقصى 200
 function add() {
-  db.transaction((current) => {
-    let value = current || 0;
+  db.once("value").then((snap) => {
+    let value = snap.val() || 0;
 
     if (value >= 200) {
-      return 200;
+      alert("🎉 وصلنا 200! انتهى التحدي");
+      return;
     }
 
-    return value + 1;
+    db.set(value + 1);
   });
 }
 </script>
