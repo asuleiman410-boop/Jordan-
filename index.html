@@ -5,68 +5,69 @@
 <title>رفع العلم LIVE</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial;
-  direction: rtl;
-  text-align: center;
-  background: #f0f2f5;
+body{
+  margin:0;
+  font-family:Arial;
+  text-align:center;
+  direction:rtl;
+  background:linear-gradient(135deg,#1e3c72,#2a5298);
+  color:white;
 }
 
-.container {
-  margin-top: 40px;
+.card{
+  margin-top:40px;
+  background:rgba(255,255,255,0.1);
+  width:340px;
+  margin-left:auto;
+  margin-right:auto;
+  padding:25px;
+  border-radius:20px;
+  backdrop-filter:blur(10px);
 }
 
-.title {
-  font-size: 24px;
-  margin-bottom: 10px;
+.counter{
+  font-size:70px;
+  margin:20px 0;
+  font-weight:bold;
 }
 
-.counter {
-  font-size: 60px;
-  font-weight: bold;
-  margin: 20px 0;
+.pole{
+  width:10px;
+  height:320px;
+  background:white;
+  margin:auto;
+  position:relative;
+  border-radius:5px;
 }
 
-.pole {
-  width: 10px;
-  height: 320px;
-  background: #222;
-  margin: auto;
-  position: relative;
-  border-radius: 5px;
+.flag{
+  width:85px;
+  position:absolute;
+  bottom:0;
+  left:-38px;
+  transition:0.6s ease;
 }
 
-.flag {
-  width: 90px;
-  position: absolute;
-  bottom: 0;
-  left: -40px;
-  transition: 0.4s ease;
+button{
+  padding:12px 25px;
+  font-size:16px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  background:#ffcc00;
+  font-weight:bold;
 }
-
-button {
-  padding: 12px 20px;
-  font-size: 16px;
-  margin-top: 20px;
-  cursor: pointer;
-  border: none;
-  border-radius: 10px;
-  background: #28a745;
-  color: white;
-}
-
-button:hover {
-  background: #1e7e34;
+button:hover{
+  transform:scale(1.05);
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="card">
 
-<div class="title">🇯🇴 رفع العلم الأردني LIVE</div>
+<h2>🇯🇴 رفع العلم الأردني LIVE</h2>
 
 <p>مدرسة أم ورقة الأنصارية الأساسية للبنات</p>
 <p>لجنة النهوض الوطني</p>
@@ -87,27 +88,24 @@ button:hover {
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-  // 🔴 ضعي رابط Firebase هنا
-  const firebaseConfig = {
-    https://jordan-flag-default-rtdb.asia-southeast1.firebasedatabase.app/
+const firebaseConfig = {
+https://jordan-flag-default-rtdb.asia-southeast1.firebasedatabase.app/
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database().ref("count");
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database().ref("count");
+// عرض الرقم للجميع (Live)
+db.on("value", (snap) => {
+  let count = snap.val() || 0;
+  document.getElementById("count").innerText = count;
+  document.getElementById("flag").style.bottom = (count * 10) + "px";
+});
 
-  // قراءة الرقم مباشرة (Live)
-  db.on("value", (snapshot) => {
-    let count = snapshot.val() || 0;
-
-    document.getElementById("count").innerText = count;
-    document.getElementById("flag").style.bottom = (count * 10) + "px";
+// زيادة الرقم
+function add() {
+  db.transaction(function(current){
+    return (current || 0) + 1;
   });
-
-  // زيادة الرقم
-  function add() {
-    db.transaction(function(current) {
-      return (current || 0) + 1;
-    });
-  }
+}
 </script>
 
 </body>
