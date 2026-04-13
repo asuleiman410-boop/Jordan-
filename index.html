@@ -11,25 +11,25 @@ body{
   font-family:Arial, sans-serif;
   text-align:center;
   direction:rtl;
-  color:white;
+  min-height:100vh;
 
-  /* 🏜️ خلفية البتراء المضمونة */
-  background-image: url("https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=1600&auto=format&fit=crop");
+  background-image: url("https://images.unsplash.com/photo-1589395937772-6c7b5b9b1c1c?q=80&w=1600&auto=format&fit=crop");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height:100vh;
 }
 
+/* overlay */
 .overlay{
-  background:rgba(0,0,0,0.35); /* خفيف حتى لا يغطي الخلفية */
+  background:rgba(0,0,0,0.45);
   min-height:100vh;
   padding:20px;
 }
 
+/* card */
 .card{
   margin-top:40px;
-  width:390px;
+  width:400px;
   max-width:92%;
   margin-inline:auto;
   padding:30px;
@@ -39,23 +39,42 @@ body{
   box-shadow:0 8px 25px rgba(0,0,0,0.35);
 }
 
-h2{font-size:26px;margin-bottom:5px;}
+/* 🎨 ألوان علم الأردن للنص */
+.title{
+  font-size:26px;
+  font-weight:bold;
+  background:linear-gradient(to right, red, white, black, green);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 
-.sub1{font-size:18px;margin:0;}
-.sub2{font-size:16px;opacity:0.9;margin-bottom:15px;}
+.sub1{
+  font-size:18px;
+  margin:0;
+  color:#ffffff;
+  text-shadow:0 1px 3px black;
+}
 
+.sub2{
+  font-size:16px;
+  margin-bottom:15px;
+  color:#ffcc00;
+}
+
+/* counter */
 .counter{
   font-size:70px;
   font-weight:bold;
-  margin:10px 0;
+  color:white;
 }
 
+/* progress */
 #progressText{
   font-size:18px;
+  color:#ffcc00;
   margin-bottom:15px;
 }
 
-/* progress bar */
 .progress-container{
   width:100%;
   height:12px;
@@ -68,7 +87,7 @@ h2{font-size:26px;margin-bottom:5px;}
 .progress-bar{
   height:100%;
   width:0%;
-  background:#ffcc00;
+  background:linear-gradient(to right, red, green);
   transition:1.2s ease;
 }
 
@@ -90,20 +109,28 @@ h2{font-size:26px;margin-bottom:5px;}
   transition:1.2s ease;
 }
 
-/* button */
+/* buttons */
 button{
-  padding:14px 28px;
-  font-size:17px;
+  padding:14px 22px;
+  font-size:16px;
   border:none;
-  border-radius:14px;
+  border-radius:12px;
   cursor:pointer;
-  background:#ffcc00;
   font-weight:bold;
+  margin:5px;
+}
+
+.addBtn{
+  background:#ffcc00;
+}
+
+.soundBtn{
+  background:#1e88e5;
+  color:white;
 }
 
 button:disabled{
   background:gray;
-  cursor:not-allowed;
 }
 
 /* win screen */
@@ -126,7 +153,7 @@ button:disabled{
 
 <body>
 
-<!-- 🎵 الموسيقى -->
+<!-- 🎵 الصوت -->
 <audio id="anthem">
   <source src="jordan-anthem.mp3" type="audio/mpeg">
 </audio>
@@ -135,13 +162,13 @@ button:disabled{
 
 <div class="card">
 
-<h2>🇯🇴 ارفع علم الأردن معنا</h2>
+<div class="title">🇯🇴 ارفع علم الأردن معنا</div>
 
 <p class="sub1">مدرسة أم ورقة الأنصارية الأساسية للبنات - لواء ماركا</p>
 <p class="sub2">لجنة النهوض الوطني</p>
 
 <div class="counter" id="count">0</div>
-<div id="progressText">0 / 200</div>
+<div id="progressText">0 / 500</div>
 
 <div class="progress-container">
   <div class="progress-bar" id="bar"></div>
@@ -152,12 +179,14 @@ button:disabled{
   src="https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg">
 </div>
 
-<button id="btn" onclick="add()">إضافة مشاركة</button>
+<button class="addBtn" onclick="add()">➕ إضافة مشاركة</button>
+<button class="soundBtn" onclick="playAnthem()">🎵 السلام الملكي</button>
 
 </div>
+
 </div>
 
-<!-- 🎉 شاشة الإنجاز -->
+<!-- 🏆 شاشة الإنجاز -->
 <div id="winScreen">
 🎉 مبروك! تم الوصول للهدف 🎉<br>
 🇯🇴 فخر الأردن 🇯🇴
@@ -176,13 +205,18 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref("count");
 
-const MAX = 200;
+const MAX = 500;
 const maxHeight = 150;
 
 let winTriggered = false;
+let anthem = document.getElementById("anthem");
 
-// 🔊 الصوت
-const anthem = document.getElementById("anthem");
+// 🎵 تشغيل الصوت
+function playAnthem(){
+  anthem.play().catch(()=> {
+    alert("اضغطي مرة ثانية لتشغيل الصوت 🎵");
+  });
+}
 
 db.on("value", (snap) => {
   let count = snap.val() || 0;
@@ -190,37 +224,27 @@ db.on("value", (snap) => {
   document.getElementById("count").innerText = count;
   document.getElementById("progressText").innerText = count + " / " + MAX;
 
-  // رفع العلم
   let height = (count / MAX) * maxHeight;
   document.getElementById("flag").style.bottom = height + "px";
 
-  // progress bar
   let percent = (count / MAX) * 100;
   document.getElementById("bar").style.width = percent + "%";
 
-  // 🎯 عند الوصول للهدف
   if (count >= MAX && !winTriggered) {
     winTriggered = true;
 
-    document.getElementById("btn").disabled = true;
-    document.getElementById("btn").innerText = "🏆 اكتمل رفع العلم";
+    document.getElementById("winScreen").style.display = "flex";
+    document.querySelector(".addBtn").disabled = true;
 
-    // 🎉 كونفتي
     confetti({
-      particleCount: 200,
-      spread: 100,
+      particleCount: 250,
+      spread: 120,
       origin: { y: 0.6 }
     });
-
-    // 🎵 تشغيل السلام الملكي
-    anthem.play().catch(()=>{});
-
-    // 🏆 شاشة الإنجاز
-    document.getElementById("winScreen").style.display = "flex";
   }
 });
 
-// ➕ زيادة + تشغيل الصوت عند أول تفاعل (مهم للموبايل)
+// ➕ إضافة + تشغيل الصوت أول مرة
 function add() {
 
   if (anthem.paused) {
