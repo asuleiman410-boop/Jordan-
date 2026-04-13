@@ -10,7 +10,7 @@ body{
   font-family:Arial;
   text-align:center;
   direction:rtl;
-  background:linear-gradient(135deg,#1e3c72,#2a5298);
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
   color:white;
 }
 
@@ -18,8 +18,7 @@ body{
   margin-top:40px;
   background:rgba(255,255,255,0.1);
   width:340px;
-  margin-left:auto;
-  margin-right:auto;
+  margin:auto;
   padding:25px;
   border-radius:20px;
   backdrop-filter:blur(10px);
@@ -45,7 +44,8 @@ body{
   position:absolute;
   bottom:0;
   left:-38px;
-  transition:0.6s ease;
+  transition:0.5s ease;
+  filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4));
 }
 
 button{
@@ -89,11 +89,13 @@ button:hover{
 
 <script>
 const firebaseConfig = {
-https://jordan-flag-default-rtdb.asia-southeast1.firebasedatabase.app/
+  databaseURL: "https://flag-77368-default-rtdb.firebaseio.com/"
+};
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref("count");
 
-// عرض الرقم للجميع (Live)
+// عرض الرقم LIVE
 db.on("value", (snap) => {
   let count = snap.val() || 0;
   document.getElementById("count").innerText = count;
@@ -102,9 +104,7 @@ db.on("value", (snap) => {
 
 // زيادة الرقم
 function add() {
-  db.transaction(function(current){
-    return (current || 0) + 1;
-  });
+  db.transaction((c) => (c || 0) + 1);
 }
 </script>
 
