@@ -2,39 +2,58 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>رفع العلم LIVE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رفع العلم الأردني</title>
 
 <style>
 body{
   margin:0;
-  font-family:Arial;
+  font-family:Arial, sans-serif;
   text-align:center;
   direction:rtl;
-  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
   color:white;
+  background:
+    linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+    url("https://images.unsplash.com/photo-1578926375605-eaf7559b1458?q=80&w=1200&auto=format&fit=crop");
+  background-size:cover;
+  background-position:center;
+  min-height:100vh;
 }
 
 .card{
   margin-top:40px;
-  background:rgba(255,255,255,0.1);
-  width:340px;
-  margin:auto;
-  padding:25px;
-  border-radius:20px;
-  backdrop-filter:blur(10px);
+  background:rgba(255,255,255,0.12);
+  width:380px;
+  max-width:90%;
+  margin-inline:auto;
+  padding:30px;
+  border-radius:24px;
+  backdrop-filter:blur(14px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+h2{
+  margin-bottom:10px;
+  font-size:28px;
 }
 
 .counter{
-  font-size:70px;
-  margin:20px 0;
+  font-size:72px;
   font-weight:bold;
+  margin:20px 0 10px;
+}
+
+#progressText{
+  font-size:18px;
+  margin-bottom:20px;
+  opacity:0.9;
 }
 
 .pole{
   width:10px;
   height:300px;
   background:white;
-  margin:auto;
+  margin:20px auto;
   position:relative;
   border-radius:5px;
 }
@@ -48,14 +67,16 @@ body{
 }
 
 button{
-  padding:12px 25px;
-  font-size:16px;
+  padding:14px 28px;
+  font-size:17px;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
   cursor:pointer;
   background:#ffcc00;
   font-weight:bold;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
+
 button:disabled{
   background:gray;
   cursor:not-allowed;
@@ -66,10 +87,11 @@ button:disabled{
 <body>
 
 <div class="card">
-  <h2>🇯🇴 رفع العلم الأردني LIVE</h2>
+  <h2>🇯🇴 ارفع علم الأردن معنا</h2>
   <p>مدرسة أم ورقة الأنصارية الأساسية للبنات</p>
 
   <div class="counter" id="count">0</div>
+  <div id="progressText">0 / 200</div>
 
   <div class="pole">
     <img id="flag" class="flag"
@@ -92,19 +114,19 @@ const db = firebase.database().ref("count");
 
 const MAX = 200;
 
-// عرض الرقم + حركة العلم
+// تحديث الرقم وحركة العلم
 db.on("value", (snap) => {
   let count = snap.val() || 0;
 
   document.getElementById("count").innerText = count;
+  document.getElementById("progressText").innerText = count + " / " + MAX;
 
-  // حركة أبطأ وأهدأ
   let height = (count / MAX) * 150;
   document.getElementById("flag").style.bottom = height + "px";
 
   if (count >= MAX) {
     document.getElementById("btn").disabled = true;
-    document.getElementById("btn").innerText = "🎉 وصلنا القمة";
+    document.getElementById("btn").innerText = "🏆 اكتمل رفع العلم";
   }
 });
 
