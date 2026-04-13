@@ -13,62 +13,84 @@ body{
   direction:rtl;
   color:white;
 
-  /* 🏜️ بتراء */
-  background: url("https://upload.wikimedia.org/wikipedia/commons/5/5f/Petra_Jordan_BW_36.jpg") no-repeat center center fixed;
+  background-image: url("https://images.unsplash.com/photo-1589395937772-6c7b5b9b1c1c?q=80&w=1600&auto=format&fit=crop");
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height:100vh;
+  background-attachment: fixed;
 }
 
 .overlay{
-  background:rgba(0,0,0,0.35);
+  background:rgba(0,0,0,0.55);
   min-height:100vh;
   padding:20px;
 }
 
 .card{
   margin-top:40px;
-  width:400px;
+  width:390px;
   max-width:92%;
   margin-inline:auto;
   padding:30px;
   border-radius:24px;
   background:rgba(255,255,255,0.12);
   backdrop-filter:blur(12px);
+  box-shadow:0 8px 25px rgba(0,0,0,0.35);
 }
 
-.title{
+h2{
   font-size:26px;
-  font-weight:bold;
-  color:#ffcc00;
+  margin-bottom:5px;
 }
 
-.sub1{font-size:18px;margin:0;}
-.sub2{font-size:16px;color:#ffcc00;margin-bottom:15px;}
+.sub1{
+  font-size:18px;
+  margin:0;
+}
 
-.counter{font-size:70px;font-weight:bold;}
+.sub2{
+  font-size:16px;
+  opacity:0.9;
+  margin-bottom:15px;
+}
 
-#progressText{color:#ffcc00;}
+.counter{
+  font-size:70px;
+  font-weight:bold;
+  margin:10px 0;
+}
 
+#progressText{
+  font-size:18px;
+  margin-bottom:15px;
+}
+
+/* progress bar */
 .progress-container{
   width:100%;
   height:12px;
   background:rgba(255,255,255,0.25);
   border-radius:10px;
   overflow:hidden;
+  margin-bottom:20px;
 }
 
 .progress-bar{
   height:100%;
   width:0%;
-  background:linear-gradient(to right, red, green);
-  transition:1s;
+  background:#ffcc00;
+  transition:1.5s ease;
 }
 
+/* السارية */
 .pole{
   width:10px;
   height:300px;
   background:white;
   margin:20px auto;
   position:relative;
+  border-radius:5px;
 }
 
 .flag{
@@ -76,35 +98,35 @@ body{
   position:absolute;
   bottom:0;
   left:-38px;
-  transition:1s;
+  transition:1.5s ease;
 }
 
+/* زر */
 button{
-  padding:14px 20px;
+  padding:14px 28px;
+  font-size:17px;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
   cursor:pointer;
-  margin:5px;
+  background:#ffcc00;
   font-weight:bold;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
 
-.addBtn{background:#ffcc00;}
-.soundBtn{background:#1e88e5;color:white;}
+button:disabled{
+  background:gray;
+  cursor:not-allowed;
+}
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 صوت -->
-<audio id="bgMusic" loop>
-  <source src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Jordanian_royal_anthem.ogg" type="audio/ogg">
-</audio>
-
 <div class="overlay">
 
 <div class="card">
 
-<div class="title">🇯🇴 ارفع علم الأردن معنا</div>
+<h2>🇯🇴 ارفع علم الأردن معنا</h2>
 
 <p class="sub1">مدرسة أم ورقة الأنصارية الأساسية للبنات - لواء ماركا</p>
 <p class="sub2">لجنة النهوض الوطني</p>
@@ -117,20 +139,18 @@ button{
 </div>
 
 <div class="pole">
-  <img class="flag" id="flag"
+  <img id="flag" class="flag"
   src="https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg">
 </div>
 
-<button class="addBtn" onclick="add()">➕ إضافة مشاركة</button>
-<button class="soundBtn" onclick="startMusic()">🎵 تشغيل الصوت</button>
+<button id="btn" onclick="add()">إضافة مشاركة</button>
 
 </div>
+
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -140,48 +160,36 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref("count");
 
-const MAX = 500;
+const MAX = 500;   // 🔥 تم التعديل هنا فقط
+const maxHeight = 150;
 
-let bgMusic = document.getElementById("bgMusic");
-let musicStarted = false;
-
-/* 🎵 تشغيل الصوت بعد أول تفاعل */
-function startMusic(){
-  if(!musicStarted){
-    bgMusic.volume = 0.4;
-    bgMusic.play().catch(()=>{
-      alert("اضغطي مرة ثانية لتشغيل الصوت 🎵");
-    });
-    musicStarted = true;
-  }
-}
-
-/* تحديث العداد */
-db.on("value", (snap)=>{
+// Live update
+db.on("value", (snap) => {
   let count = snap.val() || 0;
 
   document.getElementById("count").innerText = count;
   document.getElementById("progressText").innerText = count + " / " + MAX;
 
-  let height = (count / MAX) * 150;
+  let height = (count / MAX) * maxHeight;
   document.getElementById("flag").style.bottom = height + "px";
 
   let percent = (count / MAX) * 100;
   document.getElementById("bar").style.width = percent + "%";
 
-  if(count >= MAX){
-    confetti();
+  if (count >= MAX) {
+    document.getElementById("btn").disabled = true;
+    document.getElementById("btn").innerText = "🏆 اكتمل رفع العلم";
   }
 });
 
-/* إضافة مشاركة */
-function add(){
-  startMusic(); // أول ضغط يشغل الصوت
+// زيادة
+function add() {
+  db.once("value").then((snap) => {
+    let value = snap.val() || 0;
 
-  db.transaction((current)=>{
-    let v = current || 0;
-    if(v >= MAX) return MAX;
-    return v + 1;
+    if (value >= MAX) return;
+
+    db.set(value + 1);
   });
 }
 </script>
