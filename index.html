@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>الأردن الجميل</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  direction: rtl;
+  text-align: center;
+
+  /* 🇯🇴 خلفية الأردن */
+  background: url("https://upload.wikimedia.org/wikipedia/commons/5/5b/Amman_Jordan_skyline.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.overlay {
+  background: rgba(0,0,0,0.5);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+}
+
+.counter-box {
+  background: rgba(255,255,255,0.15);
+  padding: 30px;
+  margin: auto;
+  border-radius: 20px;
+  width: 300px;
+  backdrop-filter: blur(6px);
+}
+
+.count {
+  font-size: 60px;
+  font-weight: bold;
+  color: #fff;
+}
+
+button {
+  padding: 12px 20px;
+  font-size: 18px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #00c853;
+  color: white;
+}
+button:hover {
+  background: #00a844;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+<div class="counter-box">
+
+<h2>🇯🇴 مشاركات الطالبات</h2>
+
+<div class="count" id="count">0</div>
+
+<p>مدرسة أم ورقة الأنصارية الأساسية للبنات</p>
+<p>لجنة النهوض الوطني</p>
+
+<button onclick="add()">إضافة مشاركة</button>
+
+</div>
+
+</div>
+
+<script>
+let count = 0;
+
+function add() {
+  count++;
+  document.getElementById("count").innerText = count;
+}
+</script>
+
+</body>
+</html>
