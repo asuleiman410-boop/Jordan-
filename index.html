@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>رفع العلم الأردني</title>
+<title>رفع العلم الأردني LIVE</title>
 
 <style>
 body{
@@ -13,16 +13,15 @@ body{
   direction:rtl;
   color:white;
 
-  /* 🏜️ خلفية بتراء مضمونة */
+  /* 🏜️ خلفية البتراء */
   background-image:url("https://images.unsplash.com/photo-1539650116574-75c0c6d73f74?q=80&w=1600&auto=format&fit=crop");
   background-size:cover;
   background-position:center;
-  background-repeat:no-repeat;
   min-height:100vh;
 }
 
 .overlay{
-  background:rgba(0,0,0,0.25);
+  background:rgba(0,0,0,0.35);
   min-height:100vh;
   padding:20px;
 }
@@ -36,30 +35,21 @@ body{
   border-radius:24px;
   background:rgba(255,255,255,0.12);
   backdrop-filter:blur(12px);
-  box-shadow:0 8px 25px rgba(0,0,0,0.35);
 }
 
-/* 🇯🇴 عنوان بألوان علم الأردن */
+/* 🇯🇴 ألوان علم الأردن */
 .title{
   font-size:26px;
   font-weight:bold;
-  background:linear-gradient(to right, red, white, black, green);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.sub1{font-size:18px;margin:0;}
-.sub2{font-size:16px;color:#ffcc00;margin-bottom:15px;}
-
-.counter{
-  font-size:70px;
-  font-weight:bold;
-}
-
-#progressText{
-  font-size:18px;
   color:#ffcc00;
 }
+
+.sub1{margin:0;font-size:18px;}
+.sub2{color:#ffcc00;font-size:16px;margin-bottom:15px;}
+
+.counter{font-size:70px;font-weight:bold;}
+
+#progressText{color:#ffcc00;}
 
 .progress-container{
   width:100%;
@@ -67,14 +57,13 @@ body{
   background:rgba(255,255,255,0.25);
   border-radius:10px;
   overflow:hidden;
-  margin-bottom:20px;
 }
 
 .progress-bar{
   height:100%;
   width:0%;
   background:linear-gradient(to right, red, green);
-  transition:1s ease;
+  transition:1s;
 }
 
 .pole{
@@ -83,7 +72,6 @@ body{
   background:white;
   margin:20px auto;
   position:relative;
-  border-radius:5px;
 }
 
 .flag{
@@ -91,29 +79,27 @@ body{
   position:absolute;
   bottom:0;
   left:-38px;
-  transition:1s ease;
+  transition:1s;
 }
 
 button{
-  padding:14px 24px;
-  font-size:16px;
+  padding:14px 20px;
   border:none;
   border-radius:12px;
   cursor:pointer;
   margin:5px;
+  font-weight:bold;
 }
 
-.addBtn{background:#ffcc00;font-weight:bold;}
+.addBtn{background:#ffcc00;}
 .soundBtn{background:#1e88e5;color:white;}
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 الصوت (مهم: لازم يكون داخل تفاعل المستخدم) -->
-<audio id="anthem">
-  <source src="jordan-anthem.mp3" type="audio/mpeg">
-</audio>
+<!-- 🎵 صوت بدون ملف -->
+<audio id="anthem" src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Jordanian_royal_anthem.ogg"></audio>
 
 <div class="overlay">
 
@@ -132,18 +118,20 @@ button{
 </div>
 
 <div class="pole">
-  <img id="flag" class="flag"
+  <img class="flag" id="flag"
   src="https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg">
 </div>
 
 <button class="addBtn" onclick="add()">➕ إضافة مشاركة</button>
-<button class="soundBtn" onclick="playAnthem()">🎵 السلام الملكي</button>
+<button class="soundBtn" onclick="startSound()">🎵 تشغيل السلام الملكي</button>
 
 </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -154,10 +142,11 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref("count");
 
 const MAX = 500;
+
 let anthem = document.getElementById("anthem");
 
-/* 🎵 تشغيل الصوت (مضمون فقط عند ضغط المستخدم) */
-function playAnthem(){
+/* 🎵 تشغيل الصوت (مضمون بدون ملف) */
+function startSound(){
   anthem.play().catch(()=>{
     alert("اضغطي مرة ثانية لتشغيل الصوت 🎵");
   });
@@ -175,16 +164,14 @@ db.on("value", (snap)=>{
 
   let percent = (count / MAX) * 100;
   document.getElementById("bar").style.width = percent + "%";
+
+  if(count >= MAX){
+    confetti();
+  }
 });
 
 /* إضافة مشاركة */
 function add(){
-
-  // تشغيل الصوت عند أول تفاعل (حل مشكلة المتصفح)
-  if(anthem.paused){
-    anthem.play().catch(()=>{});
-  }
-
   db.transaction((current)=>{
     let v = current || 0;
     if(v >= MAX) return MAX;
