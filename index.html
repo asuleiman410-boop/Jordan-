@@ -13,16 +13,16 @@ body{
   direction:rtl;
   color:white;
 
-  background-image: url("https://images.unsplash.com/photo-1589395937772-6c7b5b9b1c1c?q=80&w=1600&auto=format&fit=crop");
+  /* 🏜️ خلفية البتراء المضمونة */
+  background-image: url("https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=1600&auto=format&fit=crop");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   min-height:100vh;
-  background-attachment: fixed;
 }
 
 .overlay{
-  background:rgba(0,0,0,0.55);
+  background:rgba(0,0,0,0.35); /* خفيف حتى لا يغطي الخلفية */
   min-height:100vh;
   padding:20px;
 }
@@ -39,7 +39,7 @@ body{
   box-shadow:0 8px 25px rgba(0,0,0,0.35);
 }
 
-h2{font-size:26px;}
+h2{font-size:26px;margin-bottom:5px;}
 
 .sub1{font-size:18px;margin:0;}
 .sub2{font-size:16px;opacity:0.9;margin-bottom:15px;}
@@ -55,7 +55,7 @@ h2{font-size:26px;}
   margin-bottom:15px;
 }
 
-/* progress */
+/* progress bar */
 .progress-container{
   width:100%;
   height:12px;
@@ -126,7 +126,7 @@ button:disabled{
 
 <body>
 
-<!-- 🎵 السلام الملكي -->
+<!-- 🎵 الموسيقى -->
 <audio id="anthem">
   <source src="jordan-anthem.mp3" type="audio/mpeg">
 </audio>
@@ -155,10 +155,9 @@ button:disabled{
 <button id="btn" onclick="add()">إضافة مشاركة</button>
 
 </div>
-
 </div>
 
-<!-- 🎉 win screen -->
+<!-- 🎉 شاشة الإنجاز -->
 <div id="winScreen">
 🎉 مبروك! تم الوصول للهدف 🎉<br>
 🇯🇴 فخر الأردن 🇯🇴
@@ -182,6 +181,7 @@ const maxHeight = 150;
 
 let winTriggered = false;
 
+// 🔊 الصوت
 const anthem = document.getElementById("anthem");
 
 db.on("value", (snap) => {
@@ -190,12 +190,15 @@ db.on("value", (snap) => {
   document.getElementById("count").innerText = count;
   document.getElementById("progressText").innerText = count + " / " + MAX;
 
+  // رفع العلم
   let height = (count / MAX) * maxHeight;
   document.getElementById("flag").style.bottom = height + "px";
 
+  // progress bar
   let percent = (count / MAX) * 100;
   document.getElementById("bar").style.width = percent + "%";
 
+  // 🎯 عند الوصول للهدف
   if (count >= MAX && !winTriggered) {
     winTriggered = true;
 
@@ -210,14 +213,20 @@ db.on("value", (snap) => {
     });
 
     // 🎵 تشغيل السلام الملكي
-    anthem.play();
+    anthem.play().catch(()=>{});
 
     // 🏆 شاشة الإنجاز
     document.getElementById("winScreen").style.display = "flex";
   }
 });
 
+// ➕ زيادة + تشغيل الصوت عند أول تفاعل (مهم للموبايل)
 function add() {
+
+  if (anthem.paused) {
+    anthem.play().catch(()=>{});
+  }
+
   db.transaction((current) => {
     let value = current || 0;
     if (value >= MAX) return MAX;
