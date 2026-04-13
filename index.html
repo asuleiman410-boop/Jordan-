@@ -12,29 +12,25 @@ body{
   text-align:center;
   direction:rtl;
   color:white;
-  background:
-    linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-    url("https://images.unsplash.com/photo-1578926375605-eaf7559b1458?q=80&w=1200&auto=format&fit=crop");
-  background-size:cover;
-  background-position:center;
+  background:linear-gradient(180deg,#0b1d39,#183b63);
   min-height:100vh;
 }
 
 .card{
   margin-top:40px;
-  background:rgba(255,255,255,0.12);
   width:380px;
   max-width:90%;
   margin-inline:auto;
   padding:30px;
   border-radius:24px;
-  backdrop-filter:blur(14px);
-  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  background:rgba(255,255,255,0.10);
+  box-shadow:0 8px 20px rgba(0,0,0,0.25);
+  backdrop-filter:blur(10px);
 }
 
 h2{
-  margin-bottom:10px;
   font-size:28px;
+  margin-bottom:10px;
 }
 
 .counter{
@@ -114,13 +110,14 @@ const db = firebase.database().ref("count");
 
 const MAX = 200;
 
-// تحديث الرقم وحركة العلم
+// تحديث الرقم + حركة العلم
 db.on("value", (snap) => {
   let count = snap.val() || 0;
 
   document.getElementById("count").innerText = count;
   document.getElementById("progressText").innerText = count + " / " + MAX;
 
+  // حركة بطيئة وناعمة
   let height = (count / MAX) * 150;
   document.getElementById("flag").style.bottom = height + "px";
 
