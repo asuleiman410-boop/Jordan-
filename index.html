@@ -44,7 +44,7 @@ body{
   position:absolute;
   bottom:0;
   left:-38px;
-  transition:0.5s ease;
+  transition:1.5s ease;
 }
 
 button{
@@ -66,22 +66,19 @@ button:disabled{
 <body>
 
 <div class="card">
+  <h2>🇯🇴 رفع العلم الأردني LIVE</h2>
+  <p>مدرسة أم ورقة الأنصارية الأساسية للبنات</p>
 
-<h2>🇯🇴 رفع العلم الأردني LIVE</h2>
-<p>مدرسة أم ورقة الأنصارية الأساسية للبنات</p>
+  <div class="counter" id="count">0</div>
 
-<div class="counter" id="count">0</div>
+  <div class="pole">
+    <img id="flag" class="flag"
+    src="https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg">
+  </div>
 
-<div class="pole">
-  <img id="flag" class="flag"
-  src="https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg">
+  <button id="btn" onclick="add()">إضافة مشاركة</button>
 </div>
 
-<button id="btn" onclick="add()">إضافة مشاركة</button>
-
-</div>
-
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -94,7 +91,6 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref("count");
 
 const MAX = 200;
-const maxHeight = 280;
 
 // عرض الرقم + حركة العلم
 db.on("value", (snap) => {
@@ -102,18 +98,17 @@ db.on("value", (snap) => {
 
   document.getElementById("count").innerText = count;
 
-  // حساب الارتفاع الصحيح
-  let height = (count / MAX) * maxHeight;
+  // حركة أبطأ وأهدأ
+  let height = (count / MAX) * 150;
   document.getElementById("flag").style.bottom = height + "px";
 
-  // عند الوصول للنهاية
   if (count >= MAX) {
     document.getElementById("btn").disabled = true;
     document.getElementById("btn").innerText = "🎉 وصلنا القمة";
   }
 });
 
-// زيادة مع حد أقصى 200
+// زيادة الرقم
 function add() {
   db.transaction((current) => {
     let value = current || 0;
