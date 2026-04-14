@@ -12,16 +12,25 @@ body{
   text-align:center;
   direction:rtl;
   color:white;
-
-  /* 🏜️ خلفية بتراء ثابتة */
-  background: url("https://upload.wikimedia.org/wikipedia/commons/6/6d/Petra_Jordan_SiQ.jpg") center/cover no-repeat;
   min-height:100vh;
-  background-color:black;
+
+  /* 🇯🇴 ألوان علم الأردن */
+  background: linear-gradient(
+    135deg,
+    #000000 0%,
+    #000000 25%,
+    #ffffff 25%,
+    #ffffff 50%,
+    #007a3d 50%,
+    #007a3d 75%,
+    #ce1126 75%,
+    #ce1126 100%
+  );
 }
 
 /* طبقة تغميق */
 .overlay{
-  background:rgba(0,0,0,0.55);
+  background:rgba(0,0,0,0.35);
   min-height:100vh;
   padding:20px;
 }
@@ -58,6 +67,7 @@ h2{
   font-size:70px;
   font-weight:bold;
   margin:10px 0;
+  color:#ffcc00;
 }
 
 #progressText{
@@ -65,6 +75,7 @@ h2{
   margin-bottom:15px;
 }
 
+/* progress bar */
 .progress-container{
   width:100%;
   height:12px;
@@ -77,7 +88,7 @@ h2{
 .progress-bar{
   height:100%;
   width:0%;
-  background:#ffcc00;
+  background:linear-gradient(to right,#ce1126,#007a3d);
   transition:1.5s ease;
 }
 
