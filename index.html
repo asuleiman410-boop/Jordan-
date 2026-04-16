@@ -1,206 +1,152 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>رفع العلم الأردني LIVE</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>رفع العلم - مدرسة أم ورقة الأنصارية الأساسية للبنات</title>
 
-<style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  text-align:center;
-  direction:rtl;
-  color:white;
-  min-height:100vh;
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(to bottom, #dbeafe, #ffffff);
+      overflow: hidden;
+    }
 
-  /* 🇯🇴 ألوان علم الأردن */
-  background: linear-gradient(
-    135deg,
-    #000000 0%,
-    #000000 25%,
-    #ffffff 25%,
-    #ffffff 50%,
-    #007a3d 50%,
-    #007a3d 75%,
-    #ce1126 75%,
-    #ce1126 100%
-  );
-}
+    header {
+      background: #c8102e;
+      color: white;
+      padding: 18px;
+      font-size: 24px;
+      font-weight: bold;
+    }
 
-/* طبقة تغميق */
-.overlay{
-  background:rgba(0,0,0,0.35);
-  min-height:100vh;
-  padding:20px;
-}
+    .container {
+      margin-top: 20px;
+      padding: 20px;
+    }
 
-.card{
-  margin-top:40px;
-  width:390px;
-  max-width:92%;
-  margin-inline:auto;
-  padding:30px;
-  border-radius:24px;
-  background:rgba(255,255,255,0.12);
-  backdrop-filter:blur(12px);
-  box-shadow:0 8px 25px rgba(0,0,0,0.35);
-}
+    .flagpole {
+      width: 8px;
+      height: 320px;
+      background: #555;
+      margin: 30px auto;
+      position: relative;
+      border-radius: 5px;
+    }
 
-h2{
-  font-size:26px;
-  margin-bottom:5px;
-}
+    .flag {
+      width: 140px;
+      height: 80px;
+      position: absolute;
+      right: 8px;
+      bottom: 0;
+      transition: bottom 1s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
 
-.sub1{
-  font-size:18px;
-  margin:0;
-}
+    .stripe-black { height: 33.33%; background: black; }
+    .stripe-white { height: 33.33%; background: white; }
+    .stripe-green { height: 33.33%; background: green; }
 
-.sub2{
-  font-size:16px;
-  opacity:0.9;
-  margin-bottom:15px;
-}
+    .triangle {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      border-top: 40px solid transparent;
+      border-bottom: 40px solid transparent;
+      border-right: 60px solid #c8102e;
+      z-index: 2;
+    }
 
-.counter{
-  font-size:70px;
-  font-weight:bold;
-  margin:10px 0;
-  color:#ffcc00;
-}
+    .counter {
+      font-size: 22px;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #c8102e;
+    }
 
-#progressText{
-  font-size:18px;
-  margin-bottom:15px;
-}
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #c8102e;
+      color: white;
+      cursor: pointer;
+    }
 
-/* progress bar */
-.progress-container{
-  width:100%;
-  height:12px;
-  background:rgba(255,255,255,0.25);
-  border-radius:10px;
-  overflow:hidden;
-  margin-bottom:20px;
-}
+    .school-name {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
 
-.progress-bar{
-  height:100%;
-  width:0%;
-  background:linear-gradient(to right,#ce1126,#007a3d);
-  transition:1.5s ease;
-}
-
-/* السارية */
-.pole{
-  width:10px;
-  height:300px;
-  background:white;
-  margin:20px auto;
-  position:relative;
-  border-radius:5px;
-}
-
-.flag{
-  width:85px;
-  position:absolute;
-  bottom:0;
-  left:-38px;
-  transition:1.5s ease;
-}
-
-/* زر */
-button{
-  padding:14px 28px;
-  font-size:17px;
-  border:none;
-  border-radius:14px;
-  cursor:pointer;
-  background:#ffcc00;
-  font-weight:bold;
-}
-
-button:disabled{
-  background:gray;
-  cursor:not-allowed;
-}
-</style>
+    .committee {
+      font-size: 18px;
+      margin-top: 8px;
+      color: #444;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="overlay">
+  <header>🇯🇴 فعالية رفع العلم الأردني 🇯🇴</header>
 
-<div class="card">
+  <div class="container">
+    <div class="counter">
+      عدد المشاركات: <span id="count">0</span> / 1000
+    </div>
 
-<h2>🇯🇴 ارفع علم الأردن معنا</h2>
+    <button onclick="raiseFlag()">شارك في رفع العلم</button>
 
-<p class="sub1">مدرسة أم ورقة الأنصارية الأساسية للبنات - لواء ماركا</p>
-<p class="sub2">لجنة النهوض الوطني</p>
+    <div class="flagpole">
+      <div class="flag" id="flag">
+        <div class="triangle"></div>
+        <div class="stripe-black"></div>
+        <div class="stripe-white"></div>
+        <div class="stripe-green"></div>
+      </div>
+    </div>
 
-<div class="counter" id="count">0</div>
-<div id="progressText">0 / 500</div>
+    <div class="school-name">
+      مدرسة أم ورقة الأنصارية الأساسية للبنات
+    </div>
 
-<div class="progress-container">
-  <div class="progress-bar" id="bar"></div>
-</div>
+    <div class="committee">
+      لجنة النهوض الوطني
+    </div>
+  </div>
 
-<div class="pole">
-  <img id="flag" class="flag"
-  src="https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg">
-</div>
+  <script>
+    let count = parseInt(localStorage.getItem("flagCount")) || 0;
 
-<button id="btn" onclick="add()">إضافة مشاركة</button>
+    document.getElementById("count").innerText = count;
 
-</div>
+    function updateFlag() {
+      let height = (count / 1000) * 240;
+      document.getElementById("flag").style.bottom = height + "px";
+    }
 
-</div>
+    updateFlag();
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    function raiseFlag() {
+      if (count < 1000) {
+        count++;
+        localStorage.setItem("flagCount", count);
 
-<script>
-const firebaseConfig = {
-  databaseURL: "https://flag-77368-default-rtdb.firebaseio.com/"
-};
+        document.getElementById("count").innerText = count;
+        updateFlag();
+      }
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database().ref("count");
-
-const MAX = 500;
-const maxHeight = 150;
-
-// تحديث مباشر
-db.on("value", (snap) => {
-  let count = snap.val() || 0;
-
-  document.getElementById("count").innerText = count;
-  document.getElementById("progressText").innerText = count + " / " + MAX;
-
-  let height = (count / MAX) * maxHeight;
-  document.getElementById("flag").style.bottom = height + "px";
-
-  let percent = (count / MAX) * 100;
-  document.getElementById("bar").style.width = percent + "%";
-
-  if (count >= MAX) {
-    document.getElementById("btn").disabled = true;
-    document.getElementById("btn").innerText = "🏆 اكتمل رفع العلم";
-  }
-});
-
-// إضافة
-function add() {
-  db.once("value").then((snap) => {
-    let value = snap.val() || 0;
-
-    if (value >= MAX) return;
-
-    db.set(value + 1);
-  });
-}
-</script>
+      if (count === 1000) {
+        alert("🇯🇴 اكتمل رفع العلم بـ 1000 مشاركة!");
+      }
+    }
+  </script>
 
 </body>
 </html>
