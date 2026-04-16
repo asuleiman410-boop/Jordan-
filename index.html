@@ -10,7 +10,14 @@
     margin: 0;
     font-family: Arial, sans-serif;
     text-align: center;
-    background: linear-gradient(to bottom, #dbeafe, #ffffff);
+
+    /* 🇯🇴 خلفية علم الأردن */
+    background: linear-gradient(
+      to bottom,
+      #000000 0%,
+      #ffffff 50%,
+      #007a3d 100%
+    );
   }
 
   header {
@@ -28,9 +35,26 @@
 
   .counter {
     font-size: 22px;
-    margin: 20px 0;
+    margin: 15px 0;
     font-weight: bold;
     color: #c8102e;
+  }
+
+  /* 📊 شريط التحميل (خارج العلم) */
+  .progress-bar {
+    width: 70%;
+    height: 14px;
+    background: rgba(255,255,255,0.4);
+    margin: 10px auto 25px auto;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #c8102e;
+    transition: width 0.4s ease;
   }
 
   button {
@@ -71,25 +95,24 @@
   .stripe-white { height: 33.33%; background: white; }
   .stripe-green { height: 33.33%; background: #007a3d; }
 
-  /* ✔️ المثلث أصبح حاوية مرنة */
   .triangle {
     position: absolute;
     left: 0;
     top: 0;
-    width: 65px;
-    height: 80px;
-    background: #c8102e;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 0;
+    height: 0;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 65px solid #c8102e;
   }
 
-  /* ✔️ النجمة الآن ثابتة ومتمركزة بدقة */
   .star {
-    width: 22px;
-    height: 22px;
-    display: block;
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
   }
 
   .school-name {
@@ -116,6 +139,11 @@
     عدد المشاركات: <span id="count">0</span> / 1000
   </div>
 
+  <!-- 📊 شريط التحميل -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress"></div>
+  </div>
+
   <button id="btn" onclick="raiseFlag()">شارك في رفع العلم</button>
 
   <div class="flagpole">
@@ -125,23 +153,23 @@
       <div class="stripe-white"></div>
       <div class="stripe-green"></div>
 
-      <!-- ✔️ المثلث + النجمة (متمركزة بشكل صحيح) -->
-      <div class="triangle">
-        <svg class="star" viewBox="0 0 100 100">
-          <polygon fill="white" points="
-            50,5
-            61,38
-            95,38
-            67,58
-            78,91
-            50,70
-            22,91
-            33,58
-            5,38
-            39,38
-          "/>
-        </svg>
-      </div>
+      <div class="triangle"></div>
+
+      <!-- ⭐ نجمة -->
+      <svg class="star" viewBox="0 0 100 100">
+        <polygon fill="white" points="
+          50,5
+          61,38
+          95,38
+          67,58
+          78,91
+          50,70
+          22,91
+          33,58
+          5,38
+          39,38
+        "/>
+      </svg>
 
     </div>
   </div>
@@ -162,12 +190,16 @@ let count = Number(localStorage.getItem("flagCount")) || 0;
 const countEl = document.getElementById("count");
 const flag = document.getElementById("flag");
 const btn = document.getElementById("btn");
+const progress = document.getElementById("progress");
 
 function updateUI() {
   countEl.innerText = count;
 
   const maxHeight = 240;
   flag.style.bottom = (count / 1000) * maxHeight + "px";
+
+  // 📊 تحديث شريط التحميل
+  progress.style.width = (count / 1000) * 100 + "%";
 
   if (count >= 1000) {
     btn.disabled = true;
