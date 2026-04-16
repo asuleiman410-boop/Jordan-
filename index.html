@@ -1,152 +1,186 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>رفع العلم - مدرسة أم ورقة الأنصارية الأساسية للبنات</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>رفع العلم</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: linear-gradient(to bottom, #dbeafe, #ffffff);
-      overflow: hidden;
-    }
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(to bottom, #dbeafe, #ffffff);
+    overflow-x: hidden;
+  }
 
-    header {
-      background: #c8102e;
-      color: white;
-      padding: 18px;
-      font-size: 24px;
-      font-weight: bold;
-    }
+  header {
+    background: #c8102e;
+    color: white;
+    padding: 18px;
+    font-size: 22px;
+    font-weight: bold;
+  }
 
-    .container {
-      margin-top: 20px;
-      padding: 20px;
-    }
+  .container {
+    margin-top: 20px;
+    padding: 20px;
+  }
 
-    .flagpole {
-      width: 8px;
-      height: 320px;
-      background: #555;
-      margin: 30px auto;
-      position: relative;
-      border-radius: 5px;
-    }
+  .counter {
+    font-size: 22px;
+    margin: 20px 0;
+    font-weight: bold;
+    color: #c8102e;
+  }
 
-    .flag {
-      width: 140px;
-      height: 80px;
-      position: absolute;
-      right: 8px;
-      bottom: 0;
-      transition: bottom 1s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
+  button {
+    padding: 12px 24px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background: #c8102e;
+    color: white;
+    cursor: pointer;
+  }
 
-    .stripe-black { height: 33.33%; background: black; }
-    .stripe-white { height: 33.33%; background: white; }
-    .stripe-green { height: 33.33%; background: green; }
+  button:disabled {
+    background: gray;
+  }
 
-    .triangle {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 0;
-      height: 0;
-      border-top: 40px solid transparent;
-      border-bottom: 40px solid transparent;
-      border-right: 60px solid #c8102e;
-      z-index: 2;
-    }
+  /* السارية */
+  .flagpole {
+    width: 8px;
+    height: 320px;
+    background: #555;
+    margin: 30px auto;
+    position: relative;
+    border-radius: 5px;
+  }
 
-    .counter {
-      font-size: 22px;
-      margin: 20px 0;
-      font-weight: bold;
-      color: #c8102e;
-    }
+  /* العلم */
+  .flag {
+    width: 140px;
+    height: 80px;
+    position: absolute;
+    left: 8px;
+    bottom: 0;
+    transition: bottom 0.6s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
 
-    button {
-      padding: 12px 24px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      background: #c8102e;
-      color: white;
-      cursor: pointer;
-    }
+  .stripe-black { height: 33.33%; background: black; }
+  .stripe-white { height: 33.33%; background: white; }
+  .stripe-green { height: 33.33%; background: #007a3d; }
 
-    .school-name {
-      margin-top: 20px;
-      font-size: 20px;
-      font-weight: bold;
-    }
+  .triangle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 60px solid #c8102e;
+  }
 
-    .committee {
-      font-size: 18px;
-      margin-top: 8px;
-      color: #444;
-    }
-  </style>
+  /* ⭐ مؤشر الامتلاء داخل العلم */
+  .progress-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: rgba(0, 122, 61, 0.25);
+    transition: height 0.6s ease;
+  }
+
+  .school-name {
+    margin-top: 25px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .committee {
+    font-size: 18px;
+    margin-top: 6px;
+    color: #444;
+  }
+</style>
 </head>
+
 <body>
 
-  <header>🇯🇴 فعالية رفع العلم الأردني 🇯🇴</header>
+<header>🇯🇴 فعالية رفع العلم الأردني 🇯🇴</header>
 
-  <div class="container">
-    <div class="counter">
-      عدد المشاركات: <span id="count">0</span> / 1000
-    </div>
+<div class="container">
 
-    <button onclick="raiseFlag()">شارك في رفع العلم</button>
+  <div class="counter">
+    عدد المشاركات: <span id="count">0</span> / 1000
+  </div>
 
-    <div class="flagpole">
-      <div class="flag" id="flag">
-        <div class="triangle"></div>
-        <div class="stripe-black"></div>
-        <div class="stripe-white"></div>
-        <div class="stripe-green"></div>
-      </div>
-    </div>
+  <button id="btn" onclick="raiseFlag()">شارك في رفع العلم</button>
 
-    <div class="school-name">
-      مدرسة أم ورقة الأنصارية الأساسية للبنات
-    </div>
+  <div class="flagpole">
+    <div class="flag" id="flag">
 
-    <div class="committee">
-      لجنة النهوض الوطني
+      <!-- العلم -->
+      <div class="stripe-black"></div>
+      <div class="stripe-white"></div>
+      <div class="stripe-green"></div>
+      <div class="triangle"></div>
+
+      <!-- ⭐ المؤشر الجديد -->
+      <div class="progress-overlay" id="progress"></div>
+
     </div>
   </div>
 
-  <script>
-    let count = parseInt(localStorage.getItem("flagCount")) || 0;
+  <div class="school-name">
+    مدرسة أم ورقة الأنصارية الأساسية للبنات
+  </div>
 
-    document.getElementById("count").innerText = count;
+  <div class="committee">
+    لجنة النهوض الوطني
+  </div>
 
-    function updateFlag() {
-      let height = (count / 1000) * 240;
-      document.getElementById("flag").style.bottom = height + "px";
-    }
+</div>
 
-    updateFlag();
+<script>
+let count = Number(localStorage.getItem("flagCount")) || 0;
 
-    function raiseFlag() {
-      if (count < 1000) {
-        count++;
-        localStorage.setItem("flagCount", count);
+const countEl = document.getElementById("count");
+const flag = document.getElementById("flag");
+const progress = document.getElementById("progress");
+const btn = document.getElementById("btn");
 
-        document.getElementById("count").innerText = count;
-        updateFlag();
-      }
+function updateUI() {
+  countEl.innerText = count;
 
-      if (count === 1000) {
-        alert("🇯🇴 اكتمل رفع العلم بـ 1000 مشاركة!");
-      }
-    }
-  </script>
+  // رفع العلم
+  const maxHeight = 240;
+  flag.style.bottom = (count / 1000) * maxHeight + "px";
+
+  // ⭐ تعبئة داخل العلم (المؤشر البصري)
+  progress.style.height = (count / 1000) * 100 + "%";
+
+  if (count >= 1000) {
+    btn.disabled = true;
+    btn.innerText = "اكتمل رفع العلم 🇯🇴";
+  }
+}
+
+function raiseFlag() {
+  if (count >= 1000) return;
+
+  count++;
+  localStorage.setItem("flagCount", count);
+  updateUI();
+}
+
+updateUI();
+</script>
 
 </body>
 </html>
