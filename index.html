@@ -71,25 +71,25 @@
   .stripe-white { height: 33.33%; background: white; }
   .stripe-green { height: 33.33%; background: #007a3d; }
 
+  /* ✔️ المثلث أصبح حاوية مرنة */
   .triangle {
     position: absolute;
     left: 0;
     top: 0;
-    width: 0;
-    height: 0;
-    border-top: 40px solid transparent;
-    border-bottom: 40px solid transparent;
-    border-left: 65px solid #c8102e;
+    width: 65px;
+    height: 80px;
+    background: #c8102e;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  /* ⭐ النجمة داخل المثلث (مصغّرة ومتمركزة) */
+  /* ✔️ النجمة الآن ثابتة ومتمركزة بدقة */
   .star {
-    position: absolute;
-    left: 18px;
-    top: 18px;
-    width: 18px;
-    height: 18px;
-    pointer-events: none;
+    width: 22px;
+    height: 22px;
+    display: block;
   }
 
   .school-name {
@@ -125,23 +125,23 @@
       <div class="stripe-white"></div>
       <div class="stripe-green"></div>
 
-      <div class="triangle"></div>
-
-      <!-- ⭐ نجمة الأردن -->
-      <svg class="star" viewBox="0 0 100 100">
-        <polygon fill="white" points="
-          50,5
-          61,38
-          95,38
-          67,58
-          78,91
-          50,70
-          22,91
-          33,58
-          5,38
-          39,38
-        "/>
-      </svg>
+      <!-- ✔️ المثلث + النجمة (متمركزة بشكل صحيح) -->
+      <div class="triangle">
+        <svg class="star" viewBox="0 0 100 100">
+          <polygon fill="white" points="
+            50,5
+            61,38
+            95,38
+            67,58
+            78,91
+            50,70
+            22,91
+            33,58
+            5,38
+            39,38
+          "/>
+        </svg>
+      </div>
 
     </div>
   </div>
