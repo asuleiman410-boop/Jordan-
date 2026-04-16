@@ -10,14 +10,7 @@
     margin: 0;
     font-family: Arial, sans-serif;
     text-align: center;
-
-    /* 🇯🇴 خلفية علم الأردن */
-    background: linear-gradient(
-      to bottom,
-      #000000 0%,
-      #ffffff 50%,
-      #007a3d 100%
-    );
+    background: linear-gradient(to bottom, #000000 0%, #ffffff 50%, #007a3d 100%);
   }
 
   header {
@@ -40,7 +33,6 @@
     color: #c8102e;
   }
 
-  /* 📊 شريط التحميل (خارج العلم) */
   .progress-bar {
     width: 70%;
     height: 14px;
@@ -99,19 +91,18 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 0;
-    height: 0;
-    border-top: 40px solid transparent;
-    border-bottom: 40px solid transparent;
-    border-left: 65px solid #c8102e;
+    width: 65px;
+    height: 80px;
+    background: #c8102e;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .star {
-    position: absolute;
-    left: 18px;
-    top: 18px;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     pointer-events: none;
   }
 
@@ -139,7 +130,6 @@
     عدد المشاركات: <span id="count">0</span> / 1000
   </div>
 
-  <!-- 📊 شريط التحميل -->
   <div class="progress-bar">
     <div class="progress-fill" id="progress"></div>
   </div>
@@ -153,23 +143,22 @@
       <div class="stripe-white"></div>
       <div class="stripe-green"></div>
 
-      <div class="triangle"></div>
-
-      <!-- ⭐ نجمة -->
-      <svg class="star" viewBox="0 0 100 100">
-        <polygon fill="white" points="
-          50,5
-          61,38
-          95,38
-          67,58
-          78,91
-          50,70
-          22,91
-          33,58
-          5,38
-          39,38
-        "/>
-      </svg>
+      <div class="triangle">
+        <svg class="star" viewBox="0 0 100 100">
+          <polygon fill="white" points="
+            50,5
+            61,38
+            95,38
+            67,58
+            78,91
+            50,70
+            22,91
+            33,58
+            5,38
+            39,38
+          "/>
+        </svg>
+      </div>
 
     </div>
   </div>
@@ -198,7 +187,6 @@ function updateUI() {
   const maxHeight = 240;
   flag.style.bottom = (count / 1000) * maxHeight + "px";
 
-  // 📊 تحديث شريط التحميل
   progress.style.width = (count / 1000) * 100 + "%";
 
   if (count >= 1000) {
