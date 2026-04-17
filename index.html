@@ -6,132 +6,105 @@
 <title>رفع العلم الأردني</title>
 
 <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background: linear-gradient(to bottom, #000000 0%, #ffffff 50%, #007a3d 100%);
-  }
+body {
+  margin: 0;
+  font-family: Arial;
+  text-align: center;
+  background: linear-gradient(to bottom, black, white, #007a3d);
+}
 
-  header {
-    background: #c8102e;
-    color: white;
-    padding: 18px;
-    font-size: 22px;
-    font-weight: bold;
-  }
+header {
+  background: #c8102e;
+  color: white;
+  padding: 18px;
+  font-size: 22px;
+  font-weight: bold;
+}
 
-  .container {
-    margin-top: 20px;
-    padding: 20px;
-  }
+.counter {
+  font-size: 22px;
+  margin: 15px;
+  color: #c8102e;
+  font-weight: bold;
+}
 
-  .counter {
-    font-size: 22px;
-    margin: 15px 0;
-    font-weight: bold;
-    color: #c8102e;
-  }
+.progress-bar {
+  width: 70%;
+  height: 14px;
+  margin: 10px auto;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.4);
+}
 
-  .progress-bar {
-    width: 70%;
-    height: 14px;
-    background: rgba(255,255,255,0.4);
-    margin: 10px auto 25px auto;
-    border-radius: 20px;
-    overflow: hidden;
-  }
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, black, white, #007a3d, #c8102e);
+}
 
-  .progress-fill {
-    height: 100%;
-    width: 0%;
-    background: #c8102e;
-    transition: width 0.4s ease;
-  }
+button {
+  padding: 12px 24px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  background: #c8102e;
+  color: white;
+}
 
-  button {
-    padding: 12px 24px;
-    font-size: 18px;
-    border: none;
-    border-radius: 10px;
-    background: #c8102e;
-    color: white;
-    cursor: pointer;
-  }
+.flagpole {
+  width: 8px;
+  height: 320px;
+  background: #555;
+  margin: 30px auto;
+  position: relative;
+}
 
-  button:disabled {
-    background: gray;
-  }
+.flag {
+  width: 150px;
+  height: 80px;
+  position: absolute;
+  left: 8px;
+  bottom: 0;
+  transition: 0.6s;
+  overflow: hidden;
+}
 
-  .flagpole {
-    width: 8px;
-    height: 320px;
-    background: #555;
-    margin: 30px auto;
-    position: relative;
-    border-radius: 5px;
-  }
+/* ألوان العلم */
+.stripe-black { height: 33.33%; background: black; }
+.stripe-white { height: 33.33%; background: white; }
+.stripe-green { height: 33.33%; background: #007a3d; }
 
-  .flag {
-    width: 150px;
-    height: 80px;
-    position: absolute;
-    left: 8px;
-    bottom: 0;
-    transition: bottom 0.6s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    overflow: hidden;
-  }
+/* ✔️ مثلث صحيح 100% */
+.triangle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: 40px solid transparent;
+  border-bottom: 40px solid transparent;
+  border-left: 65px solid #c8102e;
+}
 
-  .stripe-black { height: 33.33%; background: black; }
-  .stripe-white { height: 33.33%; background: white; }
-  .stripe-green { height: 33.33%; background: #007a3d; }
+/* ✔️ نجمة ثابتة داخل المثلث */
+.star {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  width: 18px;
+  height: 18px;
+}
 
-  /* ✔️ مثلث صحيح بدون أخطاء */
-  .triangle {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 65px;
-    height: 80px;
-  }
+/* نصوص */
+.school-name {
+  margin-top: 20px;
+  font-weight: bold;
+}
 
-  .triangle::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-
-    width: 0;
-    height: 0;
-
-    border-top: 40px solid transparent;
-    border-bottom: 40px solid transparent;
-    border-left: 65px solid #c8102e;
-  }
-
-  /* ✔️ النجمة ثابتة داخل المثلث */
-  .star {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-45%, -50%);
-    width: 18px;
-    height: 18px;
-    pointer-events: none;
-  }
-
-  .school-name {
-    margin-top: 25px;
-    font-size: 20px;
-    font-weight: bold;
-  }
-
-  .committee {
-    font-size: 18px;
-    margin-top: 6px;
-    color: #444;
-  }
+.committee {
+  color: #444;
+}
 </style>
 </head>
 
@@ -139,86 +112,99 @@
 
 <header>🇯🇴 فعالية رفع العلم الأردني 🇯🇴</header>
 
-<div class="container">
-
-  <div class="counter">
-    عدد المشاركات: <span id="count">0</span> / 1000
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-fill" id="progress"></div>
-  </div>
-
-  <button id="btn" onclick="raiseFlag()">شارك في رفع العلم</button>
-
-  <div class="flagpole">
-    <div class="flag" id="flag">
-
-      <div class="stripe-black"></div>
-      <div class="stripe-white"></div>
-      <div class="stripe-green"></div>
-
-      <div class="triangle">
-        <svg class="star" viewBox="0 0 100 100">
-          <polygon fill="white" points="
-            50,5
-            61,38
-            95,38
-            67,58
-            78,91
-            50,70
-            22,91
-            33,58
-            5,38
-            39,38
-          "/>
-        </svg>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="school-name">
-    مدرسة أم ورقة الأنصارية الأساسية للبنات
-  </div>
-
-  <div class="committee">
-    لجنة النهوض الوطني
-  </div>
-
+<div class="counter">
+عدد المشاركات: <span id="count">0</span> / 1000
 </div>
 
-<script>
-let count = Number(localStorage.getItem("flagCount")) || 0;
+<div class="progress-bar">
+<div class="progress-fill" id="progress"></div>
+</div>
+
+<button onclick="raiseFlag()">شارك في رفع العلم</button>
+
+<div class="flagpole">
+  <div class="flag" id="flag">
+
+    <div class="stripe-black"></div>
+    <div class="stripe-white"></div>
+    <div class="stripe-green"></div>
+
+    <div class="triangle"></div>
+
+    <svg class="star" viewBox="0 0 100 100">
+      <polygon fill="white" points="
+        50,5 61,38 95,38 67,58 78,91
+        50,70 22,91 33,58 5,38 39,38
+      "/>
+    </svg>
+
+  </div>
+</div>
+
+<div class="school-name">
+مدرسة أم ورقة الأنصارية الأساسية للبنات
+</div>
+
+<div class="committee">
+لجنة النهوض الوطني
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* 🔴 حطي بياناتك هنا */
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const ref = doc(db, "flag", "counter");
 
 const countEl = document.getElementById("count");
 const flag = document.getElementById("flag");
-const btn = document.getElementById("btn");
 const progress = document.getElementById("progress");
 
-function updateUI() {
-  countEl.innerText = count;
+let localSafe = Number(localStorage.getItem("safeCount")) || 0;
 
-  const maxHeight = 240;
-  flag.style.bottom = (count / 1000) * maxHeight + "px";
+/* تحديث العرض */
+function updateUI(c) {
+  countEl.innerText = c;
+  flag.style.bottom = (c / 1000) * 240 + "px";
+  progress.style.width = (c / 1000) * 100 + "%";
+  localStorage.setItem("safeCount", c);
+}
 
-  progress.style.width = (count / 1000) * 100 + "%";
+/* تحميل الرقم */
+async function load() {
+  const snap = await getDoc(ref);
 
-  if (count >= 1000) {
-    btn.disabled = true;
-    btn.innerText = "اكتمل رفع العلم 🇯🇴";
+  if (!snap.exists()) {
+    await setDoc(ref, { count: localSafe });
+    updateUI(localSafe);
+  } else {
+    updateUI(snap.data().count);
   }
 }
 
-function raiseFlag() {
-  if (count >= 1000) return;
-
-  count++;
-  localStorage.setItem("flagCount", count);
-  updateUI();
+/* رفع */
+async function raiseFlag() {
+  try {
+    await updateDoc(ref, { count: increment(1) });
+    load();
+  } catch {
+    localSafe++;
+    updateUI(localSafe);
+  }
 }
 
-updateUI();
+window.raiseFlag = raiseFlag;
+
+load();
 </script>
 
 </body>
