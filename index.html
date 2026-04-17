@@ -28,6 +28,7 @@ header {
   font-weight: bold;
 }
 
+/* ✔️ شريط التحميل */
 .progress-bar {
   width: 70%;
   height: 14px;
@@ -43,6 +44,7 @@ header {
   background: linear-gradient(to right, black, white, #007a3d, #c8102e);
 }
 
+/* زر */
 button {
   padding: 12px 24px;
   font-size: 18px;
@@ -52,6 +54,7 @@ button {
   color: white;
 }
 
+/* عمود العلم */
 .flagpole {
   width: 8px;
   height: 320px;
@@ -60,6 +63,7 @@ button {
   position: relative;
 }
 
+/* العلم */
 .flag {
   width: 150px;
   height: 80px;
@@ -70,30 +74,31 @@ button {
   overflow: hidden;
 }
 
-/* ألوان العلم */
+/* الألوان */
 .stripe-black { height: 33.33%; background: black; }
 .stripe-white { height: 33.33%; background: white; }
 .stripe-green { height: 33.33%; background: #007a3d; }
 
-/* ✔️ مثلث صحيح 100% */
+/* ✔️ المثلث الحقيقي (بدون مشاكل هندسية) */
 .triangle {
   position: absolute;
   left: 0;
   top: 0;
-  width: 0;
-  height: 0;
-  border-top: 40px solid transparent;
-  border-bottom: 40px solid transparent;
-  border-left: 65px solid #c8102e;
+  width: 65px;
+  height: 80px;
+  background: #c8102e;
+
+  clip-path: polygon(0 0, 0 100%, 100% 50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ✔️ نجمة ثابتة داخل المثلث */
+/* ✔️ النجمة ثابتة 100% */
 .star {
-  position: absolute;
-  left: 18px;
-  top: 18px;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 /* نصوص */
@@ -129,14 +134,14 @@ button {
     <div class="stripe-white"></div>
     <div class="stripe-green"></div>
 
-    <div class="triangle"></div>
-
-    <svg class="star" viewBox="0 0 100 100">
-      <polygon fill="white" points="
-        50,5 61,38 95,38 67,58 78,91
-        50,70 22,91 33,58 5,38 39,38
-      "/>
-    </svg>
+    <div class="triangle">
+      <svg class="star" viewBox="0 0 100 100">
+        <polygon fill="white" points="
+          50,5 61,38 95,38 67,58 78,91
+          50,70 22,91 33,58 5,38 39,38
+        "/>
+      </svg>
+    </div>
 
   </div>
 </div>
@@ -153,7 +158,6 @@ button {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-/* 🔴 حطي بياناتك هنا */
 const firebaseConfig = {
   apiKey: "YOUR_KEY",
   authDomain: "YOUR_DOMAIN",
@@ -169,9 +173,8 @@ const countEl = document.getElementById("count");
 const flag = document.getElementById("flag");
 const progress = document.getElementById("progress");
 
-let localSafe = Number(localStorage.getItem("safeCount")) || 0;
+let safe = Number(localStorage.getItem("safeCount")) || 0;
 
-/* تحديث العرض */
 function updateUI(c) {
   countEl.innerText = c;
   flag.style.bottom = (c / 1000) * 240 + "px";
@@ -179,31 +182,28 @@ function updateUI(c) {
   localStorage.setItem("safeCount", c);
 }
 
-/* تحميل الرقم */
 async function load() {
   const snap = await getDoc(ref);
 
   if (!snap.exists()) {
-    await setDoc(ref, { count: localSafe });
-    updateUI(localSafe);
+    await setDoc(ref, { count: safe });
+    updateUI(safe);
   } else {
     updateUI(snap.data().count);
   }
 }
 
-/* رفع */
 async function raiseFlag() {
   try {
     await updateDoc(ref, { count: increment(1) });
     load();
   } catch {
-    localSafe++;
-    updateUI(localSafe);
+    safe++;
+    updateUI(safe);
   }
 }
 
 window.raiseFlag = raiseFlag;
-
 load();
 </script>
 
