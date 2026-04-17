@@ -9,31 +9,18 @@
     margin: 0;
     font-family: Arial;
     text-align: center;
-
-    /* خلفية علم الأردن بشكل ناعم */
-    background: linear-gradient(
-      135deg,
-      #000 0%,
-      #fff 25%,
-      #007a3d 50%,
-      #ce1126 75%
-    );
-
+    background: linear-gradient(135deg,#000,#fff,#007a3d,#ce1126);
     min-height: 100vh;
     padding: 20px;
   }
 
-  h1 {
-    margin: 10px 0 5px;
-  }
+  h1 { margin: 10px 0 5px; }
 
   .sub {
-    margin: 4px 0;
     font-weight: bold;
-    color: #111;
+    margin: 4px 0;
   }
 
-  /* منطقة السارية */
   .stage {
     width: 160px;
     height: 340px;
@@ -41,7 +28,6 @@
     position: relative;
   }
 
-  /* السارية */
   .pole {
     width: 10px;
     height: 100%;
@@ -60,16 +46,15 @@
     transform: translateX(-50%);
     bottom: 0;
     transition: bottom 0.25s ease;
+    display: block;
   }
 
-  /* العداد */
   #count {
     font-size: 34px;
     font-weight: bold;
     margin: 15px 0;
   }
 
-  /* الزر */
   button {
     padding: 10px 18px;
     font-size: 18px;
@@ -80,7 +65,6 @@
     cursor: pointer;
   }
 
-  /* شريط التحميل */
   .progress {
     width: 80%;
     height: 18px;
@@ -93,13 +77,7 @@
   #bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(
-      to right,
-      #000 25%,
-      #fff 25% 50%,
-      #007a3d 50% 75%,
-      #ce1126 75%
-    );
+    background: linear-gradient(to right,#000 25%,#fff 25% 50%,#007a3d 50% 75%,#ce1126 75%);
     transition: width 0.25s ease;
   }
 </style>
@@ -115,9 +93,9 @@
 <div class="stage">
   <div class="pole"></div>
 
+  <!-- صورة العلم فقط بدون أي نص -->
   <img id="flag"
-       src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Jordan.svg"
-       alt="Jordan Flag">
+       src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Jordan.svg">
 </div>
 
 <div id="count">0</div>
@@ -143,10 +121,8 @@
 
     counter.textContent = count;
 
-    // رفع داخل السارية بشكل آمن (بدون خروج خارج الحدود)
-    const maxHeight = 300; // ضمن السارية
-    const step = maxHeight / max;
-
+    // رفع العلم داخل السارية بشكل آمن
+    const step = 3;
     flag.style.bottom = (count * step) + "px";
 
     // تحديث الشريط
