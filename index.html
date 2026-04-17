@@ -38,7 +38,7 @@
     border-radius: 6px;
   }
 
-  /* العلم */
+  /* نفس مكان العلم تمامًا */
   #flag {
     width: 95px;
     position: absolute;
@@ -93,9 +93,16 @@
 <div class="stage">
   <div class="pole"></div>
 
-  <!-- صورة العلم فقط بدون أي نص -->
-  <img id="flag"
-       src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Jordan.svg">
+  <!-- 🔥 علم أردن مضمّن (لا يمكن أن يختفي) -->
+  <img id="flag" alt="Jordan Flag"
+       src="data:image/svg+xml;utf8,
+       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 450'>
+       <rect width='900' height='150' y='0' fill='black'/>
+       <rect width='900' height='150' y='150' fill='white'/>
+       <rect width='900' height='150' y='300' fill='green'/>
+       <rect width='300' height='450' fill='red'/>
+       <polygon points='0,0 300,225 0,450' fill='white'/>
+       </svg>">
 </div>
 
 <div id="count">0</div>
@@ -121,11 +128,10 @@
 
     counter.textContent = count;
 
-    // رفع العلم داخل السارية بشكل آمن
-    const step = 3;
-    flag.style.bottom = (count * step) + "px";
+    // رفع تدريجي داخل السارية
+    flag.style.bottom = (count * 3) + "px";
 
-    // تحديث الشريط
+    // شريط التقدم
     bar.style.width = count + "%";
   }
 </script>
