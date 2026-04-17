@@ -21,7 +21,6 @@
     margin: 4px 0;
   }
 
-  /* منطقة السارية */
   .stage {
     width: 160px;
     height: 340px;
@@ -29,7 +28,6 @@
     position: relative;
   }
 
-  /* السارية */
   .pole {
     width: 10px;
     height: 100%;
@@ -40,15 +38,12 @@
     border-radius: 6px;
   }
 
-  /* العلم */
   #flag {
     width: 95px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     bottom: 0;
-
-    /* مهم جدًا: حركة ناعمة */
     transition: bottom 0.25s ease;
   }
 
@@ -96,7 +91,6 @@
 <div class="stage">
   <div class="pole"></div>
 
-  <!-- صورة مضمونة -->
   <img id="flag"
        src="https://flagcdn.com/w320/jo.png"
        alt="Jordan Flag">
@@ -112,13 +106,14 @@
 
 <script>
   let count = 0;
-  const max = 100;
+
+  // ✅ الحد الجديد: 1000 فقط
+  const max = 1000;
 
   const flag = document.getElementById("flag");
   const bar = document.getElementById("bar");
   const counter = document.getElementById("count");
 
-  // ارتفاع السارية الفعلي
   const poleHeight = 300;
 
   function raiseFlag() {
@@ -126,15 +121,14 @@
 
     count++;
 
-    // لا تصفير نهائيًا
     counter.textContent = count;
 
-    // رفع محسوب داخل السارية (بدقة)
+    // رفع متناسب مع 1000
     let step = poleHeight / max;
     flag.style.bottom = (count * step) + "px";
 
-    // تحديث الشريط فقط
-    bar.style.width = count + "%";
+    // الشريط يبقى طبيعي
+    bar.style.width = (count / max) * 100 + "%";
   }
 </script>
 
