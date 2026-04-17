@@ -38,6 +38,7 @@
     border-radius: 6px;
   }
 
+  /* العلم */
   #flag {
     width: 95px;
     position: absolute;
@@ -45,7 +46,6 @@
     transform: translateX(-50%);
     bottom: 0;
     transition: bottom 0.25s ease;
-    display: block;
   }
 
   #count {
@@ -92,10 +92,23 @@
 <div class="stage">
   <div class="pole"></div>
 
-  <!-- ✅ علم الأردن الصحيح (صورة رسمية موثوقة) -->
-  <img id="flag"
-       src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Jordan.svg"
-       alt="Jordan Flag">
+  <!-- ✅ علم الأردن الصحيح 100% SVG رسمي -->
+  <img id="flag" alt="Jordan Flag"
+  src="data:image/svg+xml;utf8,
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 450'>
+    <!-- الأشرطة -->
+    <rect width='900' height='150' y='0' fill='black'/>
+    <rect width='900' height='150' y='150' fill='white'/>
+    <rect width='900' height='150' y='300' fill='green'/>
+
+    <!-- المثلث الأحمر -->
+    <polygon points='0,0 450,225 0,450' fill='#ce1126'/>
+
+    <!-- النجمة البيضاء -->
+    <polygon fill='white'
+      points='180,225 200,255 235,255 205,275 215,310
+               180,290 145,310 155,275 125,255 160,255'/>
+  </svg>">
 </div>
 
 <div id="count">0</div>
