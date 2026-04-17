@@ -8,9 +8,10 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   text-align: center;
   background: linear-gradient(to bottom, black, white, #007a3d);
+  overflow: hidden;
 }
 
 header {
@@ -28,7 +29,7 @@ header {
   font-weight: bold;
 }
 
-/* ✔️ شريط التحميل */
+/* شريط التحميل */
 .progress-bar {
   width: 70%;
   height: 14px;
@@ -42,6 +43,7 @@ header {
   height: 100%;
   width: 0%;
   background: linear-gradient(to right, black, white, #007a3d, #c8102e);
+  transition: width 0.4s ease;
 }
 
 /* زر */
@@ -52,6 +54,12 @@ button {
   border-radius: 10px;
   background: #c8102e;
   color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: gray;
+  cursor: not-allowed;
 }
 
 /* عمود العلم */
@@ -70,16 +78,16 @@ button {
   position: absolute;
   left: 8px;
   bottom: 0;
-  transition: 0.6s;
+  transition: 0.6s ease;
   overflow: hidden;
 }
 
-/* الألوان */
+/* ألوان */
 .stripe-black { height: 33.33%; background: black; }
 .stripe-white { height: 33.33%; background: white; }
 .stripe-green { height: 33.33%; background: #007a3d; }
 
-/* ✔️ المثلث الحقيقي (بدون مشاكل هندسية) */
+/* مثلث */
 .triangle {
   position: absolute;
   left: 0;
@@ -87,15 +95,13 @@ button {
   width: 65px;
   height: 80px;
   background: #c8102e;
-
   clip-path: polygon(0 0, 0 100%, 100% 50%);
-
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ✔️ النجمة ثابتة 100% */
+/* نجمة */
 .star {
   width: 16px;
   height: 16px;
@@ -109,6 +115,22 @@ button {
 
 .committee {
   color: #444;
+}
+
+/* ✔️ رسالة نجاح */
+#success {
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #007a3d;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 </style>
 </head>
@@ -125,7 +147,7 @@ button {
 <div class="progress-fill" id="progress"></div>
 </div>
 
-<button onclick="raiseFlag()">شارك في رفع العلم</button>
+<button id="btn" onclick="raiseFlag()">شارك في رفع العلم</button>
 
 <div class="flagpole">
   <div class="flag" id="flag">
@@ -154,9 +176,12 @@ button {
 لجنة النهوض الوطني
 </div>
 
+<!-- رسالة النجاح -->
+<div id="success">🎉 تم الوصول إلى 1000 مشاركة! 🇯🇴</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "YOUR_KEY",
@@ -172,22 +197,27 @@ const ref = doc(db, "flag", "counter");
 const countEl = document.getElementById("count");
 const flag = document.getElementById("flag");
 const progress = document.getElementById("progress");
-
-let safe = Number(localStorage.getItem("safeCount")) || 0;
+const btn = document.getElementById("btn");
+const success = document.getElementById("success");
 
 function updateUI(c) {
   countEl.innerText = c;
   flag.style.bottom = (c / 1000) * 240 + "px";
   progress.style.width = (c / 1000) * 100 + "%";
-  localStorage.setItem("safeCount", c);
+
+  if (c >= 1000) {
+    btn.disabled = true;
+    btn.innerText = "اكتمل رفع العلم 🇯🇴";
+    success.style.display = "block";
+  }
 }
 
 async function load() {
   const snap = await getDoc(ref);
 
   if (!snap.exists()) {
-    await setDoc(ref, { count: safe });
-    updateUI(safe);
+    await setDoc(ref, { count: 0 });
+    updateUI(0);
   } else {
     updateUI(snap.data().count);
   }
@@ -195,15 +225,25 @@ async function load() {
 
 async function raiseFlag() {
   try {
-    await updateDoc(ref, { count: increment(1) });
+    await runTransaction(db, async (tx) => {
+      const snap = await tx.get(ref);
+
+      let current = snap.exists() ? snap.data().count : 0;
+
+      if (current >= 1000) return;
+
+      tx.set(ref, { count: current + 1 });
+    });
+
     load();
-  } catch {
-    safe++;
-    updateUI(safe);
+
+  } catch (e) {
+    console.error(e);
   }
 }
 
 window.raiseFlag = raiseFlag;
+
 load();
 </script>
 
