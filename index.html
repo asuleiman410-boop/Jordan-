@@ -6,33 +6,43 @@
 
 <style>
   body {
+    margin: 0;
     font-family: Arial;
     text-align: center;
-    margin: 0;
+
+    /* خلفية علم الأردن بشكل ناعم */
+    background: linear-gradient(
+      135deg,
+      #000 0%,
+      #fff 25%,
+      #007a3d 50%,
+      #ce1126 75%
+    );
+
+    min-height: 100vh;
     padding: 20px;
-    background: #f5f5f5;
   }
 
   h1 {
-    margin-bottom: 5px;
+    margin: 10px 0 5px;
   }
 
   .sub {
-    color: #333;
+    margin: 4px 0;
     font-weight: bold;
-    margin: 5px 0;
+    color: #111;
   }
 
-  /* حاوية السارية */
-  .pole {
-    width: 140px;
-    height: 320px;
+  /* منطقة السارية */
+  .stage {
+    width: 160px;
+    height: 340px;
     margin: 25px auto;
     position: relative;
   }
 
-  /* السارية نفسها */
-  .pole-line {
+  /* السارية */
+  .pole {
     width: 10px;
     height: 100%;
     background: #555;
@@ -44,53 +54,53 @@
 
   /* العلم */
   #flag {
-    width: 90px;
+    width: 95px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     bottom: 0;
-    transition: bottom 0.2s ease;
+    transition: bottom 0.25s ease;
   }
 
   /* العداد */
   #count {
-    font-size: 32px;
-    margin: 15px 0;
+    font-size: 34px;
     font-weight: bold;
+    margin: 15px 0;
   }
 
-  /* زر */
+  /* الزر */
   button {
-    padding: 10px 20px;
+    padding: 10px 18px;
     font-size: 18px;
-    cursor: pointer;
     border: none;
     background: #c62828;
     color: white;
     border-radius: 8px;
+    cursor: pointer;
   }
 
   /* شريط التحميل */
-  .progress-container {
+  .progress {
     width: 80%;
     height: 18px;
-    background: #ddd;
     margin: 20px auto;
+    background: #ddd;
     border-radius: 10px;
     overflow: hidden;
   }
 
-  #progress {
+  #bar {
     height: 100%;
     width: 0%;
     background: linear-gradient(
       to right,
-      black 25%,
-      white 25% 50%,
-      green 50% 75%,
-      red 75%
+      #000 25%,
+      #fff 25% 50%,
+      #007a3d 50% 75%,
+      #ce1126 75%
     );
-    transition: width 0.2s ease;
+    transition: width 0.25s ease;
   }
 </style>
 </head>
@@ -102,17 +112,18 @@
 <div class="sub">لجنة النهوض الوطني</div>
 <div class="sub">مدرسة أم ورقة الأنصارية</div>
 
-<div class="pole">
-  <div class="pole-line"></div>
+<div class="stage">
+  <div class="pole"></div>
 
   <img id="flag"
-       src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Jordan.svg">
+       src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Jordan.svg"
+       alt="Jordan Flag">
 </div>
 
 <div id="count">0</div>
 
-<div class="progress-container">
-  <div id="progress"></div>
+<div class="progress">
+  <div id="bar"></div>
 </div>
 
 <button onclick="raiseFlag()">ارفع العلم</button>
@@ -121,16 +132,25 @@
   let count = 0;
   const max = 100;
 
+  const flag = document.getElementById("flag");
+  const bar = document.getElementById("bar");
+  const counter = document.getElementById("count");
+
   function raiseFlag() {
     if (count >= max) return;
 
     count++;
 
-    document.getElementById("count").innerText = count;
-    document.getElementById("progress").style.width = count + "%";
+    counter.textContent = count;
 
-    // رفع داخل السارية بشكل مضبوط
-    document.getElementById("flag").style.bottom = (count * 3) + "px";
+    // رفع داخل السارية بشكل آمن (بدون خروج خارج الحدود)
+    const maxHeight = 300; // ضمن السارية
+    const step = maxHeight / max;
+
+    flag.style.bottom = (count * step) + "px";
+
+    // تحديث الشريط
+    bar.style.width = count + "%";
   }
 </script>
 
