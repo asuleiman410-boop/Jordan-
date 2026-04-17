@@ -21,6 +21,7 @@
     margin: 4px 0;
   }
 
+  /* منطقة السارية */
   .stage {
     width: 160px;
     height: 340px;
@@ -28,6 +29,7 @@
     position: relative;
   }
 
+  /* السارية */
   .pole {
     width: 10px;
     height: 100%;
@@ -45,6 +47,8 @@
     left: 50%;
     transform: translateX(-50%);
     bottom: 0;
+
+    /* مهم جدًا: حركة ناعمة */
     transition: bottom 0.25s ease;
   }
 
@@ -92,23 +96,10 @@
 <div class="stage">
   <div class="pole"></div>
 
-  <!-- ✅ علم الأردن الصحيح 100% SVG رسمي -->
-  <img id="flag" alt="Jordan Flag"
-  src="data:image/svg+xml;utf8,
-  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 450'>
-    <!-- الأشرطة -->
-    <rect width='900' height='150' y='0' fill='black'/>
-    <rect width='900' height='150' y='150' fill='white'/>
-    <rect width='900' height='150' y='300' fill='green'/>
-
-    <!-- المثلث الأحمر -->
-    <polygon points='0,0 450,225 0,450' fill='#ce1126'/>
-
-    <!-- النجمة البيضاء -->
-    <polygon fill='white'
-      points='180,225 200,255 235,255 205,275 215,310
-               180,290 145,310 155,275 125,255 160,255'/>
-  </svg>">
+  <!-- صورة مضمونة -->
+  <img id="flag"
+       src="https://flagcdn.com/w320/jo.png"
+       alt="Jordan Flag">
 </div>
 
 <div id="count">0</div>
@@ -127,17 +118,22 @@
   const bar = document.getElementById("bar");
   const counter = document.getElementById("count");
 
+  // ارتفاع السارية الفعلي
+  const poleHeight = 300;
+
   function raiseFlag() {
     if (count >= max) return;
 
     count++;
 
+    // لا تصفير نهائيًا
     counter.textContent = count;
 
-    // رفع داخل السارية
-    flag.style.bottom = (count * 3) + "px";
+    // رفع محسوب داخل السارية (بدقة)
+    let step = poleHeight / max;
+    flag.style.bottom = (count * step) + "px";
 
-    // الشريط
+    // تحديث الشريط فقط
     bar.style.width = count + "%";
   }
 </script>
