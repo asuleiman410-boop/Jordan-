@@ -8,9 +8,16 @@
   body {
     font-family: Arial;
     text-align: center;
-    background: #f5f5f5;
     margin: 0;
     padding: 20px;
+    background: linear-gradient(
+      135deg,
+      black 0%,
+      white 25%,
+      green 50%,
+      red 75%
+    );
+    min-height: 100vh;
   }
 
   h1 {
@@ -18,7 +25,8 @@
   }
 
   .sub {
-    color: #444;
+    color: #222;
+    font-weight: bold;
     margin: 5px 0;
   }
 
@@ -44,8 +52,9 @@
 
   /* العداد */
   #count {
-    font-size: 32px;
+    font-size: 34px;
     margin: 15px 0;
+    font-weight: bold;
   }
 
   /* زر */
@@ -89,7 +98,7 @@
 <h1>ارفع العلم الأردني 🇯🇴</h1>
 
 <div class="sub">لجنة النهوض الوطني</div>
-<div class="sub">مدرسة: ____________</div>
+<div class="sub">مدرسة أم ورقة الأنصارية</div>
 
 <div class="pole">
   <img id="flag" src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Jordan.svg">
@@ -112,13 +121,8 @@
 
     count++;
 
-    // تحديث الرقم
     document.getElementById("count").innerText = count;
-
-    // رفع العلم تدريجيًا
     document.getElementById("flag").style.bottom = (count * 3) + "px";
-
-    // تحديث شريط التحميل
     document.getElementById("progress").style.width = count + "%";
   }
 </script>
