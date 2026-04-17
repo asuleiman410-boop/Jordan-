@@ -10,14 +10,7 @@
     text-align: center;
     margin: 0;
     padding: 20px;
-    background: linear-gradient(
-      135deg,
-      black 0%,
-      white 25%,
-      green 50%,
-      red 75%
-    );
-    min-height: 100vh;
+    background: #f5f5f5;
   }
 
   h1 {
@@ -25,24 +18,33 @@
   }
 
   .sub {
-    color: #222;
+    color: #333;
     font-weight: bold;
     margin: 5px 0;
   }
 
-  /* السارية */
+  /* حاوية السارية */
   .pole {
-    width: 12px;
+    width: 140px;
     height: 320px;
-    background: #555;
-    margin: 20px auto;
+    margin: 25px auto;
     position: relative;
+  }
+
+  /* السارية نفسها */
+  .pole-line {
+    width: 10px;
+    height: 100%;
+    background: #555;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     border-radius: 6px;
   }
 
   /* العلم */
   #flag {
-    width: 110px;
+    width: 90px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -52,7 +54,7 @@
 
   /* العداد */
   #count {
-    font-size: 34px;
+    font-size: 32px;
     margin: 15px 0;
     font-weight: bold;
   }
@@ -101,7 +103,10 @@
 <div class="sub">مدرسة أم ورقة الأنصارية</div>
 
 <div class="pole">
-  <img id="flag" src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Jordan.svg">
+  <div class="pole-line"></div>
+
+  <img id="flag"
+       src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Jordan.svg">
 </div>
 
 <div id="count">0</div>
@@ -122,8 +127,10 @@
     count++;
 
     document.getElementById("count").innerText = count;
-    document.getElementById("flag").style.bottom = (count * 3) + "px";
     document.getElementById("progress").style.width = count + "%";
+
+    // رفع داخل السارية بشكل مضبوط
+    document.getElementById("flag").style.bottom = (count * 3) + "px";
   }
 </script>
 
